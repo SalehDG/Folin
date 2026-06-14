@@ -1,0 +1,1076 @@
+={
+  "active": true,
+  "activeVersion": {
+    "updatedAt": "2026-06-13T13:37:28.000Z",
+    "createdAt": "2026-06-13T13:35:30.846Z",
+    "versionId": "bf2b03fa-775d-4bb7-bd7f-2a49c3b24cee",
+    "workflowId": "c517osOLx0Zbnd7M",
+    "nodes": [
+      {
+        "parameters": {
+          "promptType": "=define",
+          "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
+          "options": {
+            "systemMessage": "Kamu adalah Folin, asisten AI pribadi yang dibuat khusus untuk membantu Saleh.\nKamu bisa dipanggil \"Lin\". Tetapi saat memperkenalkan diri tetap dengan nama \"Folin\". Lin hanya sebatas panggilan User ke kamu.\n\n## Identitas\n- Nama lengkap: Folin\n- Nama panggilan: Lin\n- Aktif sejak: 28 Mei 2026\n- Tujuan: Menjadi asisten pribadi Saleh\n\n## Tanggung Jawab Utama\nKamu membantu Saleh di 5 hal utama:\n\n1. **Catat Tugas** — Simpan, lacak, dan ingatkan Saleh soal tugas-tugasnya\n2. **Keuangan** — Catat pemasukan, pengeluaran, dan bantu Saleh pantau kondisi keuangannya\n3. **Planning Harian** — Buatkan jadwal dan rencana kerja harian yang sesuai kebutuhan Saleh\n4. **Catatan Umum** — Catat apapun yang ingin Saleh ingat atau rujuk kembali nanti\n5.  **Tempat Bertanya** — Jawab semua pertanyaan saleh dengan prioritas mengecek database dari saleh, kalau tidak ada baru cek di internet dan pengetahuanmu sendiri. Kalau tidak dapat jawaban langsung jawab saja tidak tau dengan sopan\n\n## Kepribadian & Cara Bicara\n- Kamu santai, hangat, dan terasa seperti teman — bukan robot formal\n- Pakai bahasa sehari-hari yang natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- Tetap to the point — Saleh sibuk, jadi jangan bertele-tele\n- Kalau Saleh kasih info (tugas, pengeluaran, rencana), konfirmasi balik dengan ringkas biar dia tahu sudah tercatat\n- Kalau jadwal atau keuangan Saleh kelihatan bermasalah, boleh kasih tahu dengan cara yang sopan dan boleh kasar. Yang penting saleh sadar\n\n## Hal Penting\n- **Folin bisa melayani siapa saja yang mengajak bicara**, \n  tidak terbatas hanya Saleh.\n- Jika bukan Saleh yang bicara, tetap bantu sesuai kemampuan. \n  Untuk hal yang menyangkut data pribadi Saleh (keuangan, \n  tugas, jadwal), minta konfirmasi identitas dulu atau \n  infokan bahwa data tersebut privat.\n- Kamu baru aktif sejak 28 Mei 2026. \n- Kalau kamu menyebut namamu sendiri. Sebut nama lengkapmu."
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          704,
+          160
+        ],
+        "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
+        "name": "AI Agent"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -624,
+          1376
+        ],
+        "id": "e289f416-3046-4c7f-89ea-953232d3c387",
+        "name": "Embeddings Google Gemini",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "k27SnwImRZKrqF5r",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "retrieve-as-tool",
+          "toolDescription": "Gunakan data dari database ini sebagai patokan utama, jika tidak ada gunakan pengetahuanmu sendiri",
+          "tableName": {
+            "__rl": true,
+            "value": "document",
+            "mode": "list",
+            "cachedResultName": "document"
+          },
+          "topK": 20,
+          "useReranker": true,
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "typeVersion": 1.3,
+        "position": [
+          0,
+          1136
+        ],
+        "id": "7d1302c4-2821-4d5c-97e6-5a664b023c45",
+        "name": "Supabase Vector Store1",
+        "credentials": {
+          "supabaseApi": {
+            "id": "fJAk2egDiCh6MW5U",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-flash-lite-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1.1,
+        "position": [
+          560,
+          368
+        ],
+        "id": "cf636936-5d00-422b-8230-fe804f33399f",
+        "name": "Google Gemini Chat Model",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "k27SnwImRZKrqF5r",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "mode": "insert",
+          "tableName": {
+            "__rl": true,
+            "value": "document",
+            "mode": "list",
+            "cachedResultName": "document"
+          },
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+        "typeVersion": 1.3,
+        "position": [
+          -608,
+          1136
+        ],
+        "id": "fad0204c-c49e-4fd0-83d7-983946e1a313",
+        "name": "Supabase Vector Store",
+        "credentials": {
+          "supabaseApi": {
+            "id": "fJAk2egDiCh6MW5U",
+            "name": "Supabase account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "dataType": "binary",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+        "typeVersion": 1.1,
+        "position": [
+          -400,
+          1344
+        ],
+        "id": "fd6e4d32-b318-4aeb-baa9-39fa6a1d5293",
+        "name": "Default Data Loader"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.rerankerCohere",
+        "typeVersion": 1,
+        "position": [
+          208,
+          1392
+        ],
+        "id": "9991104c-aa5f-4019-bf99-0c7e0a8e6d87",
+        "name": "Reranker Cohere",
+        "credentials": {
+          "cohereApi": {
+            "id": "PC8dRyj4ikBu79tC",
+            "name": "Cohere account"
+          }
+        }
+      },
+      {
+        "parameters": {},
+        "type": "@devlikeapro/n8n-nodes-waha.wahaTrigger",
+        "typeVersion": 202502,
+        "position": [
+          -608,
+          128
+        ],
+        "id": "cc10be87-e1d0-4d64-b29f-ea322e1653f5",
+        "name": "WAHA Trigger",
+        "webhookId": "2f55e258-e093-4abb-8058-2d780839d6b1"
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Send Text",
+          "session": "={{ $('WAHA Trigger').item.json.session }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+          "text": "={{ $('AI Agent').item.json.output }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          1424,
+          160
+        ],
+        "id": "fb3544a2-db57-47ed-bd7d-1105fa471dd2",
+        "name": "Send a text message",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "sessionIdType": "customKey",
+          "sessionKey": "={{ $('WAHA Trigger').item.json.payload.from }}",
+          "contextWindowLength": 20
+        },
+        "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+        "typeVersion": 1.4,
+        "position": [
+          784,
+          352
+        ],
+        "id": "8d4aa094-2f5e-421e-bbbb-2c196c03a2ab",
+        "name": "Simple Memory"
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Send Seen",
+          "participant": "",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          256,
+          160
+        ],
+        "id": "a339207f-62b6-437c-8b72-da5d8fb77361",
+        "name": "Send Seen",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Start Typing",
+          "session": "={{ $('WAHA Trigger').item.json.session }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.id }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          464,
+          160
+        ],
+        "id": "98aebe63-bb30-4481-8d57-d5db1d82f665",
+        "name": "Start Typing",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Stop Typing",
+          "session": "={{ $('WAHA Trigger').item.json.session }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          1184,
+          160
+        ],
+        "id": "afca1cca-b6fa-4f70-90f6-77a0fd4ee3c3",
+        "name": "Stop Typing",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d9422915-c9ea-4eb1-a041-a525cf16b016",
+                "leftValue": "={{ $json.payload.from}}",
+                "rightValue": "g.us",
+                "operator": {
+                  "type": "string",
+                  "operation": "endsWith"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -240,
+          144
+        ],
+        "id": "b2d4bab7-590d-41b9-a836-b5c42db3cc6a",
+        "name": "If"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "626e85f1-3e23-462b-b7c8-85ff99a7e3c5",
+                "leftValue": "={{ $('WAHA Trigger').item.json.payload.body }}",
+                "rightValue": "@263827644006534",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          0,
+          0
+        ],
+        "id": "6e7233e8-35e5-4a6b-a4e8-d7cf8ac2846e",
+        "name": "If1"
+      },
+      {
+        "parameters": {},
+        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+        "typeVersion": 1,
+        "position": [
+          -16,
+          1328
+        ],
+        "id": "2031772d-2718-46c9-941e-d68cbf10a533",
+        "name": "Embeddings Google Gemini1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "tgCsIV8J2paiV6A2",
+            "name": "RAG API"
+          }
+        }
+      }
+    ],
+    "connections": {
+      "AI Agent": {
+        "main": [
+          [
+            {
+              "node": "Stop Typing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Supabase Vector Store",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Default Data Loader": {
+        "ai_document": [
+          [
+            {
+              "node": "Supabase Vector Store",
+              "type": "ai_document",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Reranker Cohere": {
+        "ai_reranker": [
+          [
+            {
+              "node": "Supabase Vector Store1",
+              "type": "ai_reranker",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "WAHA Trigger": {
+        "main": [
+          [],
+          [
+            {
+              "node": "If",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Simple Memory": {
+        "ai_memory": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_memory",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send Seen": {
+        "main": [
+          [
+            {
+              "node": "Start Typing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start Typing": {
+        "main": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Stop Typing": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If": {
+        "main": [
+          [
+            {
+              "node": "If1",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send Seen",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "If1": {
+        "main": [
+          [
+            {
+              "node": "Send Seen",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Embeddings Google Gemini1": {
+        "ai_embedding": [
+          [
+            {
+              "node": "Supabase Vector Store1",
+              "type": "ai_embedding",
+              "index": 0
+            }
+          ]
+        ]
+      }
+    },
+    "nodeGroups": [],
+    "authors": "Saleh DG",
+    "name": "Versi aktif di vps",
+    "description": "",
+    "autosaved": true,
+    "workflowPublishHistory": [
+      {
+        "createdAt": "2026-06-13T13:37:28.386Z",
+        "id": 3,
+        "workflowId": "c517osOLx0Zbnd7M",
+        "versionId": "bf2b03fa-775d-4bb7-bd7f-2a49c3b24cee",
+        "event": "activated",
+        "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
+      }
+    ]
+  },
+  "activeVersionId": "bf2b03fa-775d-4bb7-bd7f-2a49c3b24cee",
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Stop Typing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reranker Cohere": {
+      "ai_reranker": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_reranker",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WAHA Trigger": {
+      "main": [
+        [],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Seen": {
+      "main": [
+        [
+          {
+            "node": "Start Typing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Typing": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stop Typing": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Seen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Send Seen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store1",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2026-06-13T12:24:31.175Z",
+  "description": null,
+  "id": "c517osOLx0Zbnd7M",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Folin",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "=define",
+        "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
+        "options": {
+          "systemMessage": "Kamu adalah Folin, asisten AI pribadi yang dibuat khusus untuk membantu Saleh.\nKamu bisa dipanggil \"Lin\". Tetapi saat memperkenalkan diri tetap dengan nama \"Folin\". Lin hanya sebatas panggilan User ke kamu.\n\n## Identitas\n- Nama lengkap: Folin\n- Nama panggilan: Lin\n- Aktif sejak: 28 Mei 2026\n- Tujuan: Menjadi asisten pribadi Saleh\n\n## Tanggung Jawab Utama\nKamu membantu Saleh di 5 hal utama:\n\n1. **Catat Tugas** — Simpan, lacak, dan ingatkan Saleh soal tugas-tugasnya\n2. **Keuangan** — Catat pemasukan, pengeluaran, dan bantu Saleh pantau kondisi keuangannya\n3. **Planning Harian** — Buatkan jadwal dan rencana kerja harian yang sesuai kebutuhan Saleh\n4. **Catatan Umum** — Catat apapun yang ingin Saleh ingat atau rujuk kembali nanti\n5.  **Tempat Bertanya** — Jawab semua pertanyaan saleh dengan prioritas mengecek database dari saleh, kalau tidak ada baru cek di internet dan pengetahuanmu sendiri. Kalau tidak dapat jawaban langsung jawab saja tidak tau dengan sopan\n\n## Kepribadian & Cara Bicara\n- Kamu santai, hangat, dan terasa seperti teman — bukan robot formal\n- Pakai bahasa sehari-hari yang natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- Tetap to the point — Saleh sibuk, jadi jangan bertele-tele\n- Kalau Saleh kasih info (tugas, pengeluaran, rencana), konfirmasi balik dengan ringkas biar dia tahu sudah tercatat\n- Kalau jadwal atau keuangan Saleh kelihatan bermasalah, boleh kasih tahu dengan cara yang sopan dan boleh kasar. Yang penting saleh sadar\n\n## Hal Penting\n- **Folin bisa melayani siapa saja yang mengajak bicara**, \n  tidak terbatas hanya Saleh.\n- Jika bukan Saleh yang bicara, tetap bantu sesuai kemampuan. \n  Untuk hal yang menyangkut data pribadi Saleh (keuangan, \n  tugas, jadwal), minta konfirmasi identitas dulu atau \n  infokan bahwa data tersebut privat.\n- Kamu baru aktif sejak 28 Mei 2026. \n- Kalau kamu menyebut namamu sendiri. Sebut nama lengkapmu."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        704,
+        160
+      ],
+      "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -624,
+        1376
+      ],
+      "id": "e289f416-3046-4c7f-89ea-953232d3c387",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "k27SnwImRZKrqF5r",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Gunakan data dari database ini sebagai patokan utama, jika tidak ada gunakan pengetahuanmu sendiri",
+        "tableName": {
+          "__rl": true,
+          "value": "document",
+          "mode": "list",
+          "cachedResultName": "document"
+        },
+        "topK": 20,
+        "useReranker": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        1136
+      ],
+      "id": "7d1302c4-2821-4d5c-97e6-5a664b023c45",
+      "name": "Supabase Vector Store1",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fJAk2egDiCh6MW5U",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-flash-lite-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        368
+      ],
+      "id": "cf636936-5d00-422b-8230-fe804f33399f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "k27SnwImRZKrqF5r",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "document",
+          "mode": "list",
+          "cachedResultName": "document"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -608,
+        1136
+      ],
+      "id": "fad0204c-c49e-4fd0-83d7-983946e1a313",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "fJAk2egDiCh6MW5U",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        -400,
+        1344
+      ],
+      "id": "fd6e4d32-b318-4aeb-baa9-39fa6a1d5293",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.rerankerCohere",
+      "typeVersion": 1,
+      "position": [
+        208,
+        1392
+      ],
+      "id": "9991104c-aa5f-4019-bf99-0c7e0a8e6d87",
+      "name": "Reranker Cohere",
+      "credentials": {
+        "cohereApi": {
+          "id": "PC8dRyj4ikBu79tC",
+          "name": "Cohere account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@devlikeapro/n8n-nodes-waha.wahaTrigger",
+      "typeVersion": 202502,
+      "position": [
+        -608,
+        128
+      ],
+      "id": "cc10be87-e1d0-4d64-b29f-ea322e1653f5",
+      "name": "WAHA Trigger",
+      "webhookId": "2f55e258-e093-4abb-8058-2d780839d6b1"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Text",
+        "session": "={{ $('WAHA Trigger').item.json.session }}",
+        "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1424,
+        160
+      ],
+      "id": "fb3544a2-db57-47ed-bd7d-1105fa471dd2",
+      "name": "Send a text message",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('WAHA Trigger').item.json.payload.from }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        784,
+        352
+      ],
+      "id": "8d4aa094-2f5e-421e-bbbb-2c196c03a2ab",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Seen",
+        "participant": "",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        256,
+        160
+      ],
+      "id": "a339207f-62b6-437c-8b72-da5d8fb77361",
+      "name": "Send Seen",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Start Typing",
+        "session": "={{ $('WAHA Trigger').item.json.session }}",
+        "chatId": "={{ $('WAHA Trigger').item.json.payload.id }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        464,
+        160
+      ],
+      "id": "98aebe63-bb30-4481-8d57-d5db1d82f665",
+      "name": "Start Typing",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Stop Typing",
+        "session": "={{ $('WAHA Trigger').item.json.session }}",
+        "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1184,
+        160
+      ],
+      "id": "afca1cca-b6fa-4f70-90f6-77a0fd4ee3c3",
+      "name": "Stop Typing",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d9422915-c9ea-4eb1-a041-a525cf16b016",
+              "leftValue": "={{ $json.payload.from}}",
+              "rightValue": "g.us",
+              "operator": {
+                "type": "string",
+                "operation": "endsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -240,
+        144
+      ],
+      "id": "b2d4bab7-590d-41b9-a836-b5c42db3cc6a",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "626e85f1-3e23-462b-b7c8-85ff99a7e3c5",
+              "leftValue": "={{ $('WAHA Trigger').item.json.payload.body }}",
+              "rightValue": "@263827644006534",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "6e7233e8-35e5-4a6b-a4e8-d7cf8ac2846e",
+      "name": "If1"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -16,
+        1328
+      ],
+      "id": "2031772d-2718-46c9-941e-d68cbf10a533",
+      "name": "Embeddings Google Gemini1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "tgCsIV8J2paiV6A2",
+          "name": "RAG API"
+        }
+      }
+    }
+  ],
+  "pinData": {
+    "Supabase Vector Store1": [
+      {
+        "json": {
+          "name": "First item",
+          "code": 1
+        }
+      },
+      {
+        "json": {
+          "name": "Second item",
+          "code": 2
+        }
+      }
+    ]
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-13T12:24:31.186Z",
+      "createdAt": "2026-06-13T12:24:31.186Z",
+      "role": "workflow:owner",
+      "workflowId": "c517osOLx0Zbnd7M",
+      "projectId": "kbiHS04LQQ6cOAs2",
+      "project": {
+        "updatedAt": "2026-06-13T12:21:43.212Z",
+        "createdAt": "2026-06-13T11:21:43.893Z",
+        "id": "kbiHS04LQQ6cOAs2",
+        "name": "Saleh DG <REDACTED_EMAIL@example.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
+      }
+    }
+  ],
+  "sourceWorkflowId": null,
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 1,
+  "updatedAt": "2026-06-13T13:35:30.844Z",
+  "versionCounter": 33,
+  "versionId": "bf2b03fa-775d-4bb7-bd7f-2a49c3b24cee"
+}
