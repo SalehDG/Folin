@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-14T13:49:49.000Z",
-    "createdAt": "2026-06-14T13:49:22.670Z",
-    "versionId": "ce721b95-6b09-4916-9d38-f3cc9b2009d3",
+    "updatedAt": "2026-06-14T13:56:51.000Z",
+    "createdAt": "2026-06-14T13:55:55.298Z",
+    "versionId": "f3f5fba6-1400-45b0-8cee-8a3251dda22c",
     "workflowId": "pRgtmX9F8Yav0tRI",
     "nodes": [
       {
@@ -195,9 +195,9 @@
           "operation": "edit",
           "owner": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}",
           "repository": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}",
-          "filePath": "=={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{$node[\"N8N Workflow Detail\"].json[\"name\"]}}.json",
-          "fileContent": "=={{$node[\"Code Node\"].json[\"n8n_data_stringy\"]}}",
-          "commitMessage": "==[N8N Backup] {{$node[\"N8N Workflow Detail\"].json[\"name\"]}}.json ({{$json[\"github_status\"]}})"
+          "filePath": "={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{$node[\"N8N Workflow Detail\"].json[\"name\"]}}.json",
+          "fileContent": "={{$node[\"Code Node\"].json[\"n8n_data_stringy\"]}}",
+          "commitMessage": "=[N8N Backup] {{$node[\"N8N Workflow Detail\"].json[\"name\"]}}.json ({{$json[\"github_status\"]}})"
         },
         "name": "GitHub Edit",
         "type": "n8n-nodes-base.github",
@@ -220,9 +220,9 @@
           "resource": "file",
           "owner": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}",
           "repository": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}",
-          "filePath": "=={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{$node[\"N8N Workflow Detail\"].json[\"name\"]}}.json",
-          "fileContent": "=={{$node[\"Code Node\"].json[\"n8n_data_stringy\"]}}",
-          "commitMessage": "==[N8N Backup] {{$node[\"N8N Workflow Detail\"].json[\"name\"]}}.json ({{$json[\"github_status\"]}})"
+          "filePath": "={{$node[\"Globals\"].json[\"repo\"][\"path\"]}}{{$node[\"N8N Workflow Detail\"].json[\"name\"]}}.json",
+          "fileContent": "={{$node[\"Code Node\"].json[\"n8n_data_stringy\"]}}",
+          "commitMessage": "=[N8N Backup] {{$node[\"N8N Workflow Detail\"].json[\"name\"]}}.json ({{$json[\"github_status\"]}})"
         },
         "name": "GitHub Create",
         "type": "n8n-nodes-base.github",
@@ -516,21 +516,21 @@
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "Berjalan dengan normal",
+    "name": "Perbaiki bug \"=\" pada nama",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-14T13:49:49.274Z",
-        "id": 4,
+        "createdAt": "2026-06-14T13:56:51.276Z",
+        "id": 6,
         "workflowId": "pRgtmX9F8Yav0tRI",
-        "versionId": "ce721b95-6b09-4916-9d38-f3cc9b2009d3",
+        "versionId": "f3f5fba6-1400-45b0-8cee-8a3251dda22c",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "ce721b95-6b09-4916-9d38-f3cc9b2009d3",
+  "activeVersionId": "f3f5fba6-1400-45b0-8cee-8a3251dda22c",
   "connections": {
     "new": {
       "main": [
