@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-13T13:37:28.000Z",
-    "createdAt": "2026-06-13T13:35:30.846Z",
-    "versionId": "bf2b03fa-775d-4bb7-bd7f-2a49c3b24cee",
+    "updatedAt": "2026-06-14T14:16:24.000Z",
+    "createdAt": "2026-06-14T14:16:13.975Z",
+    "versionId": "fd7ec426-cad4-4e34-97b9-800d7f556981",
     "workflowId": "c517osOLx0Zbnd7M",
     "nodes": [
       {
@@ -17,7 +17,7 @@
         "type": "@n8n/n8n-nodes-langchain.agent",
         "typeVersion": 3.1,
         "position": [
-          704,
+          912,
           160
         ],
         "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
@@ -77,7 +77,7 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1.1,
         "position": [
-          560,
+          768,
           368
         ],
         "id": "cf636936-5d00-422b-8230-fe804f33399f",
@@ -170,7 +170,7 @@
         "type": "@devlikeapro/n8n-nodes-waha.WAHA",
         "typeVersion": 202502,
         "position": [
-          1424,
+          1632,
           160
         ],
         "id": "fb3544a2-db57-47ed-bd7d-1105fa471dd2",
@@ -191,7 +191,7 @@
         "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
         "typeVersion": 1.4,
         "position": [
-          784,
+          992,
           352
         ],
         "id": "8d4aa094-2f5e-421e-bbbb-2c196c03a2ab",
@@ -224,13 +224,13 @@
           "resource": "Chatting",
           "operation": "Start Typing",
           "session": "={{ $('WAHA Trigger').item.json.session }}",
-          "chatId": "={{ $('WAHA Trigger').item.json.payload.id }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
           "requestOptions": {}
         },
         "type": "@devlikeapro/n8n-nodes-waha.WAHA",
         "typeVersion": 202502,
         "position": [
-          464,
+          672,
           160
         ],
         "id": "98aebe63-bb30-4481-8d57-d5db1d82f665",
@@ -253,7 +253,7 @@
         "type": "@devlikeapro/n8n-nodes-waha.WAHA",
         "typeVersion": 202502,
         "position": [
-          1184,
+          1392,
           160
         ],
         "id": "afca1cca-b6fa-4f70-90f6-77a0fd4ee3c3",
@@ -347,6 +347,20 @@
             "name": "RAG API"
           }
         }
+      },
+      {
+        "parameters": {
+          "amount": "=4"
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          464,
+          160
+        ],
+        "id": "b94229d1-aa2f-485e-9ce3-c64248644a8d",
+        "name": "Wait",
+        "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
       }
     ],
     "connections": {
@@ -432,7 +446,7 @@
         "main": [
           [
             {
-              "node": "Start Typing",
+              "node": "Wait",
               "type": "main",
               "index": 0
             }
@@ -500,25 +514,36 @@
             }
           ]
         ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Start Typing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "Versi aktif di vps",
+    "name": "perbaikan fungsi grup v2",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-13T13:37:28.386Z",
-        "id": 3,
+        "createdAt": "2026-06-14T14:16:24.561Z",
+        "id": 10,
         "workflowId": "c517osOLx0Zbnd7M",
-        "versionId": "bf2b03fa-775d-4bb7-bd7f-2a49c3b24cee",
+        "versionId": "fd7ec426-cad4-4e34-97b9-800d7f556981",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "bf2b03fa-775d-4bb7-bd7f-2a49c3b24cee",
+  "activeVersionId": "fd7ec426-cad4-4e34-97b9-800d7f556981",
   "connections": {
     "AI Agent": {
       "main": [
@@ -548,7 +573,7 @@
           {
             "node": "AI Agent",
             "type": "ai_languageModel",
-            "index": 0
+            "index": 1
           }
         ]
       ]
@@ -602,7 +627,7 @@
       "main": [
         [
           {
-            "node": "Start Typing",
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
@@ -670,6 +695,28 @@
           }
         ]
       ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Start Typing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "NVIDIA Nemotron Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-06-13T12:24:31.175Z",
@@ -686,14 +733,15 @@
       "parameters": {
         "promptType": "=define",
         "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
+        "needsFallback": true,
         "options": {
-          "systemMessage": "Kamu adalah Folin, asisten AI pribadi yang dibuat khusus untuk membantu Saleh.\nKamu bisa dipanggil \"Lin\". Tetapi saat memperkenalkan diri tetap dengan nama \"Folin\". Lin hanya sebatas panggilan User ke kamu.\n\n## Identitas\n- Nama lengkap: Folin\n- Nama panggilan: Lin\n- Aktif sejak: 28 Mei 2026\n- Tujuan: Menjadi asisten pribadi Saleh\n\n## Tanggung Jawab Utama\nKamu membantu Saleh di 5 hal utama:\n\n1. **Catat Tugas** — Simpan, lacak, dan ingatkan Saleh soal tugas-tugasnya\n2. **Keuangan** — Catat pemasukan, pengeluaran, dan bantu Saleh pantau kondisi keuangannya\n3. **Planning Harian** — Buatkan jadwal dan rencana kerja harian yang sesuai kebutuhan Saleh\n4. **Catatan Umum** — Catat apapun yang ingin Saleh ingat atau rujuk kembali nanti\n5.  **Tempat Bertanya** — Jawab semua pertanyaan saleh dengan prioritas mengecek database dari saleh, kalau tidak ada baru cek di internet dan pengetahuanmu sendiri. Kalau tidak dapat jawaban langsung jawab saja tidak tau dengan sopan\n\n## Kepribadian & Cara Bicara\n- Kamu santai, hangat, dan terasa seperti teman — bukan robot formal\n- Pakai bahasa sehari-hari yang natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- Tetap to the point — Saleh sibuk, jadi jangan bertele-tele\n- Kalau Saleh kasih info (tugas, pengeluaran, rencana), konfirmasi balik dengan ringkas biar dia tahu sudah tercatat\n- Kalau jadwal atau keuangan Saleh kelihatan bermasalah, boleh kasih tahu dengan cara yang sopan dan boleh kasar. Yang penting saleh sadar\n\n## Hal Penting\n- **Folin bisa melayani siapa saja yang mengajak bicara**, \n  tidak terbatas hanya Saleh.\n- Jika bukan Saleh yang bicara, tetap bantu sesuai kemampuan. \n  Untuk hal yang menyangkut data pribadi Saleh (keuangan, \n  tugas, jadwal), minta konfirmasi identitas dulu atau \n  infokan bahwa data tersebut privat.\n- Kamu baru aktif sejak 28 Mei 2026. \n- Kalau kamu menyebut namamu sendiri. Sebut nama lengkapmu."
+          "systemMessage": "Kamu adalah Folin, asisten AI pribadi yang dibuat khusus untuk membantu Saleh.\nKamu bisa dipanggil \"Lin\". Tetapi saat memperkenalkan diri tetap dengan nama \"Folin\". Lin hanya sebatas panggilan User ke kamu.\n\nIdentitas :\n- Nama lengkap: Folin\n- Nama panggilan: Lin\n- Aktif sejak: 28 Mei 2026\n- Tujuan: Menjadi asisten pribadi Saleh\n\nTanggung Jawab Utama :\nKamu membantu Saleh di 5 hal utama:\n\n1. Catat Tugas = Simpan, lacak, dan ingatkan Saleh soal tugas-tugasnya\n2. Keuangan = Catat pemasukan, pengeluaran, dan bantu Saleh pantau kondisi keuangannya\n3. Planning Harian = Buatkan jadwal dan rencana kerja harian yang sesuai kebutuhan Saleh\n4. Catatan Umum = Catat apapun yang ingin Saleh ingat atau rujuk kembali nanti\n5.  Tempat Bertanya = Jawab semua pertanyaan saleh dengan prioritas mengecek database dari saleh, kalau tidak ada baru cek di internet dan pengetahuanmu sendiri. Kalau tidak dapat jawaban langsung jawab saja tidak tau dengan sopan.\n\n\n## Kepribadian & Cara Bicara\n- Kamu santai, hangat, dan terasa seperti teman — bukan robot formal\n- Pakai bahasa sehari-hari yang natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- Tetap to the point — Saleh sibuk, jadi jangan bertele-tele\n- Kalau Saleh kasih info (tugas, pengeluaran, rencana), konfirmasi balik dengan ringkas biar dia tahu sudah tercatat\n- Kalau jadwal atau keuangan Saleh kelihatan bermasalah, boleh kasih tahu dengan cara yang sopan dan boleh kasar. Yang penting saleh sadar\n- Jawab secara efektif jangan bertele tele\n- Kamu berbasis di WhatsApp jadi buat formatnya agar mudah di baca untuk platform WhatsApp\n\n## Hal Penting\n- **Folin bisa melayani siapa saja yang mengajak bicara**, \n  tidak terbatas hanya Saleh.\n- Jika bukan Saleh yang bicara, tetap bantu sesuai kemampuan. \n  Untuk hal yang menyangkut data pribadi Saleh (keuangan, \n  tugas, jadwal), minta konfirmasi identitas dulu atau \n  infokan bahwa data tersebut privat.\n- Kamu baru aktif sejak 28 Mei 2026. \n- Kalau kamu menyebut namamu sendiri. Sebut nama lengkapmu."
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        704,
+        912,
         160
       ],
       "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
@@ -753,8 +801,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        560,
-        368
+        880,
+        384
       ],
       "id": "cf636936-5d00-422b-8230-fe804f33399f",
       "name": "Google Gemini Chat Model",
@@ -846,7 +894,7 @@
       "type": "@devlikeapro/n8n-nodes-waha.WAHA",
       "typeVersion": 202502,
       "position": [
-        1424,
+        1632,
         160
       ],
       "id": "fb3544a2-db57-47ed-bd7d-1105fa471dd2",
@@ -867,7 +915,7 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        784,
+        992,
         352
       ],
       "id": "8d4aa094-2f5e-421e-bbbb-2c196c03a2ab",
@@ -900,13 +948,13 @@
         "resource": "Chatting",
         "operation": "Start Typing",
         "session": "={{ $('WAHA Trigger').item.json.session }}",
-        "chatId": "={{ $('WAHA Trigger').item.json.payload.id }}",
+        "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
         "requestOptions": {}
       },
       "type": "@devlikeapro/n8n-nodes-waha.WAHA",
       "typeVersion": 202502,
       "position": [
-        464,
+        672,
         160
       ],
       "id": "98aebe63-bb30-4481-8d57-d5db1d82f665",
@@ -929,7 +977,7 @@
       "type": "@devlikeapro/n8n-nodes-waha.WAHA",
       "typeVersion": 202502,
       "position": [
-        1184,
+        1392,
         160
       ],
       "id": "afca1cca-b6fa-4f70-90f6-77a0fd4ee3c3",
@@ -1023,6 +1071,40 @@
           "name": "RAG API"
         }
       }
+    },
+    {
+      "parameters": {
+        "amount": "=4"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        464,
+        160
+      ],
+      "id": "b94229d1-aa2f-485e-9ce3-c64248644a8d",
+      "name": "Wait",
+      "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
+    },
+    {
+      "parameters": {
+        "model": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatNvidia",
+      "typeVersion": 1,
+      "position": [
+        768,
+        384
+      ],
+      "id": "4ff6d715-43b4-48b3-b70c-adbee8c8aa10",
+      "name": "NVIDIA Nemotron Chat Model",
+      "credentials": {
+        "nvidiaApi": {
+          "id": "wtgaM993s693ZFBF",
+          "name": "NVIDIA Nemotron account"
+        }
+      }
     }
   ],
   "pinData": {
@@ -1070,7 +1152,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-13T13:35:30.844Z",
-  "versionCounter": 33,
-  "versionId": "bf2b03fa-775d-4bb7-bd7f-2a49c3b24cee"
+  "updatedAt": "2026-06-14T14:38:31.323Z",
+  "versionCounter": 89,
+  "versionId": "4dc9ef5b-62fe-4a91-b3ae-3aba15525931"
 }
