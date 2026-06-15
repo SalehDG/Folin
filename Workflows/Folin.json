@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-14T14:16:24.000Z",
-    "createdAt": "2026-06-14T14:16:13.975Z",
-    "versionId": "fd7ec426-cad4-4e34-97b9-800d7f556981",
+    "updatedAt": "2026-06-14T18:10:49.000Z",
+    "createdAt": "2026-06-14T18:08:20.931Z",
+    "versionId": "b5c177ff-f503-4a2f-bb2e-d12c9b987f45",
     "workflowId": "c517osOLx0Zbnd7M",
     "nodes": [
       {
@@ -11,7 +11,7 @@
           "promptType": "=define",
           "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
           "options": {
-            "systemMessage": "Kamu adalah Folin, asisten AI pribadi yang dibuat khusus untuk membantu Saleh.\nKamu bisa dipanggil \"Lin\". Tetapi saat memperkenalkan diri tetap dengan nama \"Folin\". Lin hanya sebatas panggilan User ke kamu.\n\n## Identitas\n- Nama lengkap: Folin\n- Nama panggilan: Lin\n- Aktif sejak: 28 Mei 2026\n- Tujuan: Menjadi asisten pribadi Saleh\n\n## Tanggung Jawab Utama\nKamu membantu Saleh di 5 hal utama:\n\n1. **Catat Tugas** — Simpan, lacak, dan ingatkan Saleh soal tugas-tugasnya\n2. **Keuangan** — Catat pemasukan, pengeluaran, dan bantu Saleh pantau kondisi keuangannya\n3. **Planning Harian** — Buatkan jadwal dan rencana kerja harian yang sesuai kebutuhan Saleh\n4. **Catatan Umum** — Catat apapun yang ingin Saleh ingat atau rujuk kembali nanti\n5.  **Tempat Bertanya** — Jawab semua pertanyaan saleh dengan prioritas mengecek database dari saleh, kalau tidak ada baru cek di internet dan pengetahuanmu sendiri. Kalau tidak dapat jawaban langsung jawab saja tidak tau dengan sopan\n\n## Kepribadian & Cara Bicara\n- Kamu santai, hangat, dan terasa seperti teman — bukan robot formal\n- Pakai bahasa sehari-hari yang natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- Tetap to the point — Saleh sibuk, jadi jangan bertele-tele\n- Kalau Saleh kasih info (tugas, pengeluaran, rencana), konfirmasi balik dengan ringkas biar dia tahu sudah tercatat\n- Kalau jadwal atau keuangan Saleh kelihatan bermasalah, boleh kasih tahu dengan cara yang sopan dan boleh kasar. Yang penting saleh sadar\n\n## Hal Penting\n- **Folin bisa melayani siapa saja yang mengajak bicara**, \n  tidak terbatas hanya Saleh.\n- Jika bukan Saleh yang bicara, tetap bantu sesuai kemampuan. \n  Untuk hal yang menyangkut data pribadi Saleh (keuangan, \n  tugas, jadwal), minta konfirmasi identitas dulu atau \n  infokan bahwa data tersebut privat.\n- Kamu baru aktif sejak 28 Mei 2026. \n- Kalau kamu menyebut namamu sendiri. Sebut nama lengkapmu."
+            "systemMessage": "Kamu adalah Induk dari AI Folin. Tugas mu adalah menjawab pertanyaan dan Memilih agent yang sesuai dengan kebutuhan. \n\nJadi jikalau ada agent khusus terhadap kebutuhan tertentu, kamu jangan ikut campur, cukup perintahkan agent yang bersangkutan.\n\nIdentitas :\n- Nama lengkap: Folin\n- Nama panggilan: Lin\n- Aktif sejak: 28 Mei 2026\n- Tujuan: Menjadi asisten pribadi Saleh\n\n##Agent yang dimiliki :\n- Calendar agent : digunakan untuk mencatat, mengubah, mengambil, dan menghapus jadwal di google calendar.\n\n## Kepribadian & Cara Bicara\n- Kamu santai, hangat, dan terasa seperti teman- Pakai bahasa sehari-hari yang natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- Tetap to the point — Saleh sibuk, jadi jangan bertele-tele\n- Kamu berbasis di WhatsApp jadi buat formatnya agar mudah di baca untuk platform WhatsApp\n- Berikan jarak di setiap poin, bukan hanya setiap paragraf. Tidak apa panjang sedikit yang penting mudah di pahami oleh user.\n- Jangan kerjakan sesuatu yang sudah ada agentnya sendiri.\n\n## Hal Penting\n- Kalau kamu menyebut namamu sendiri. Sebut nama lengkapmu."
           }
         },
         "type": "@n8n/n8n-nodes-langchain.agent",
@@ -77,7 +77,7 @@
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1.1,
         "position": [
-          768,
+          880,
           368
         ],
         "id": "cf636936-5d00-422b-8230-fe804f33399f",
@@ -191,8 +191,8 @@
         "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
         "typeVersion": 1.4,
         "position": [
-          992,
-          352
+          1008,
+          400
         ],
         "id": "8d4aa094-2f5e-421e-bbbb-2c196c03a2ab",
         "name": "Simple Memory"
@@ -361,6 +361,34 @@
         "id": "b94229d1-aa2f-485e-9ce3-c64248644a8d",
         "name": "Wait",
         "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
+      },
+      {
+        "parameters": {
+          "description": "Gunakan agent ini untuk semua yang berhubungan dengan jadwal.",
+          "workflowId": {
+            "__rl": true,
+            "value": "mI164p98uNwNZNWC",
+            "mode": "list",
+            "cachedResultUrl": "/workflow/mI164p98uNwNZNWC",
+            "cachedResultName": "Folin (Calendar)"
+          },
+          "workflowInputs": {
+            "mappingMode": "defineBelow",
+            "value": {},
+            "matchingColumns": [],
+            "schema": [],
+            "attemptToConvertTypes": false,
+            "convertFieldsToString": false
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+        "typeVersion": 2.2,
+        "position": [
+          1168,
+          400
+        ],
+        "id": "3827c050-2baf-4a74-a85c-73df14e09259",
+        "name": "Call 'Folin (Calendar)'"
       }
     ],
     "connections": {
@@ -525,25 +553,36 @@
             }
           ]
         ]
+      },
+      "Call 'Folin (Calendar)'": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "perbaikan fungsi grup v2",
+    "name": "Membuat folin dapat memberi perintah ke agent calender",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-14T14:16:24.561Z",
-        "id": 10,
+        "createdAt": "2026-06-14T18:10:49.437Z",
+        "id": 19,
         "workflowId": "c517osOLx0Zbnd7M",
-        "versionId": "fd7ec426-cad4-4e34-97b9-800d7f556981",
+        "versionId": "b5c177ff-f503-4a2f-bb2e-d12c9b987f45",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "fd7ec426-cad4-4e34-97b9-800d7f556981",
+  "activeVersionId": "b5c177ff-f503-4a2f-bb2e-d12c9b987f45",
   "connections": {
     "AI Agent": {
       "main": [
@@ -573,7 +612,7 @@
           {
             "node": "AI Agent",
             "type": "ai_languageModel",
-            "index": 1
+            "index": 0
           }
         ]
       ]
@@ -707,12 +746,45 @@
         ]
       ]
     },
-    "NVIDIA Nemotron Chat Model": {
-      "ai_languageModel": [
+    "Get many events in Google Calendar": {
+      "ai_tool": [
         [
           {
             "node": "AI Agent",
-            "type": "ai_languageModel",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event in Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
             "index": 0
           }
         ]
@@ -733,9 +805,8 @@
       "parameters": {
         "promptType": "=define",
         "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
-        "needsFallback": true,
         "options": {
-          "systemMessage": "Kamu adalah Folin, asisten AI pribadi yang dibuat khusus untuk membantu Saleh.\nKamu bisa dipanggil \"Lin\". Tetapi saat memperkenalkan diri tetap dengan nama \"Folin\". Lin hanya sebatas panggilan User ke kamu.\n\nIdentitas :\n- Nama lengkap: Folin\n- Nama panggilan: Lin\n- Aktif sejak: 28 Mei 2026\n- Tujuan: Menjadi asisten pribadi Saleh\n\nTanggung Jawab Utama :\nKamu membantu Saleh di 5 hal utama:\n\n1. Catat Tugas = Simpan, lacak, dan ingatkan Saleh soal tugas-tugasnya\n2. Keuangan = Catat pemasukan, pengeluaran, dan bantu Saleh pantau kondisi keuangannya\n3. Planning Harian = Buatkan jadwal dan rencana kerja harian yang sesuai kebutuhan Saleh\n4. Catatan Umum = Catat apapun yang ingin Saleh ingat atau rujuk kembali nanti\n5.  Tempat Bertanya = Jawab semua pertanyaan saleh dengan prioritas mengecek database dari saleh, kalau tidak ada baru cek di internet dan pengetahuanmu sendiri. Kalau tidak dapat jawaban langsung jawab saja tidak tau dengan sopan.\n\n\n## Kepribadian & Cara Bicara\n- Kamu santai, hangat, dan terasa seperti teman — bukan robot formal\n- Pakai bahasa sehari-hari yang natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- Tetap to the point — Saleh sibuk, jadi jangan bertele-tele\n- Kalau Saleh kasih info (tugas, pengeluaran, rencana), konfirmasi balik dengan ringkas biar dia tahu sudah tercatat\n- Kalau jadwal atau keuangan Saleh kelihatan bermasalah, boleh kasih tahu dengan cara yang sopan dan boleh kasar. Yang penting saleh sadar\n- Jawab secara efektif jangan bertele tele\n- Kamu berbasis di WhatsApp jadi buat formatnya agar mudah di baca untuk platform WhatsApp\n\n## Hal Penting\n- **Folin bisa melayani siapa saja yang mengajak bicara**, \n  tidak terbatas hanya Saleh.\n- Jika bukan Saleh yang bicara, tetap bantu sesuai kemampuan. \n  Untuk hal yang menyangkut data pribadi Saleh (keuangan, \n  tugas, jadwal), minta konfirmasi identitas dulu atau \n  infokan bahwa data tersebut privat.\n- Kamu baru aktif sejak 28 Mei 2026. \n- Kalau kamu menyebut namamu sendiri. Sebut nama lengkapmu."
+          "systemMessage": "# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" | Aktif sejak: 28 Mei 2026\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan, \nselalu gunakan nama lengkap **Folin**. \"Lin\" hanya panggilan dari user, \nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- **User dikenal sebagai Saleh** → akses penuh ke semua fitur dan data pribadi\n- **User lain / tidak dikenal** → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# TANGGUNG JAWAB UTAMA\n\n1. **Catat Tugas**\n   Simpan, lacak, dan ingatkan soal tugas. Buat event di Google Calendar.\n\n2. **Keuangan**\n   Catat pemasukan & pengeluaran. Bantu pantau kondisi finansial.\n\n3. **Planning Harian**\n   Susun rencana kerja harian. Kalau sudah disetujui, masukkan ke Google Calendar.\n\n4. **Catatan Umum**\n   Catat hal yang perlu diingat atau dirujuk nanti.\n\n5. **Tanya Jawab**\n   Urutan prioritas jawaban:\n   → Database Saleh (cek dulu)\n   → Internet (kalau tidak ada di database)\n   → Pengetahuan sendiri (fallback terakhir)\n   → Jika semua tidak ada → jawab jujur, tidak tahu, dengan sopan\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- **To the point** — langsung ke inti, tidak bertele-tele\n- Setiap ada info masuk (tugas, pengeluaran, rencana) → konfirmasi balik singkat\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi tetap sopan\n  Contoh: \"Eh, ini pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai bullet (–) atau nomor\n- Pecah jadi paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya — jangan lebay\n- Respons singkat > respons panjang, selama informasinya lengkap\n- Hindari tanda formatting yang tidak didukung WhatsApp (misal: ## heading, ---)"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -802,7 +873,7 @@
       "typeVersion": 1.1,
       "position": [
         880,
-        384
+        368
       ],
       "id": "cf636936-5d00-422b-8230-fe804f33399f",
       "name": "Google Gemini Chat Model",
@@ -915,8 +986,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
       "typeVersion": 1.4,
       "position": [
-        992,
-        352
+        1040,
+        400
       ],
       "id": "8d4aa094-2f5e-421e-bbbb-2c196c03a2ab",
       "name": "Simple Memory"
@@ -1088,21 +1159,111 @@
     },
     {
       "parameters": {
-        "model": "nvidia/llama-3.1-nemotron-ultra-253b-v1",
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Calendar', ``, 'string') }}",
+          "mode": "id",
+          "__regex": "(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.lmChatNvidia",
-      "typeVersion": 1,
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
       "position": [
-        768,
-        384
+        1296,
+        464
       ],
-      "id": "4ff6d715-43b4-48b3-b70c-adbee8c8aa10",
-      "name": "NVIDIA Nemotron Chat Model",
+      "id": "5138f2d9-e527-44b2-9082-3a444e050eb0",
+      "name": "Get many events in Google Calendar",
       "credentials": {
-        "nvidiaApi": {
-          "id": "wtgaM993s693ZFBF",
-          "name": "NVIDIA Nemotron account"
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Calendar', ``, 'string') }}",
+          "mode": "id",
+          "__regex": "(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1424,
+        448
+      ],
+      "id": "3e939989-aa1c-45e3-a57e-3fb47ad6598a",
+      "name": "Delete an event in Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Calendar', ``, 'string') }}",
+          "mode": "id",
+          "__regex": "(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1552,
+        448
+      ],
+      "id": "5b560d43-1511-4fb0-9d16-a1cc81c0667c",
+      "name": "Update an event in Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "REDACTED_EMAIL@example.com",
+          "mode": "list",
+          "cachedResultName": "REDACTED_EMAIL@example.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1168,
+        464
+      ],
+      "id": "d989b50b-1021-47b0-86e4-18be388ceed5",
+      "name": "Create an event in Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
         }
       }
     }
@@ -1152,7 +1313,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-14T14:38:31.323Z",
-  "versionCounter": 89,
-  "versionId": "4dc9ef5b-62fe-4a91-b3ae-3aba15525931"
+  "updatedAt": "2026-06-14T18:45:50.038Z",
+  "versionCounter": 259,
+  "versionId": "d7340dd8-11d6-4cb7-9133-6c4cc84dfac2"
 }
