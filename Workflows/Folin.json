@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-16T12:11:20.000Z",
-    "createdAt": "2026-06-16T12:09:15.271Z",
-    "versionId": "c6d7506f-d77d-4de4-a575-da732b466f84",
+    "updatedAt": "2026-06-16T13:55:39.000Z",
+    "createdAt": "2026-06-16T13:54:05.606Z",
+    "versionId": "6228dafc-b9e8-4df9-83c2-b9ff7b35cb30",
     "workflowId": "c517osOLx0Zbnd7M",
     "nodes": [
       {
@@ -11,7 +11,7 @@
           "promptType": "=define",
           "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
           "options": {
-            "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Panggil tool yang relevan — LANGSUNG, tanpa teks apapun sebelumnya\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
+            "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata, Tapi sebelum itu selalu cek ini dari grub mana.\n\nYang mengechat kali ini adalah : {{ $('WAHA Trigger').item.json.payload.from }}\n\nCek list kode grub dibawah ini, Tidak harus sama persis, yang penting jika menganding kode tersebut, maka itu adalah nama grubnya\n\nBerikut list kode grub :\n\n- REDACTED_GROUP_HRD = HRD\n\nContoh :\nyang mengechat adalah : REDACTED_GROUP_HRD@g.us dan di list ada REDACTED_GROUP_HRD, maka itu adalah HRD, walau dia tidak sama persis.\n\nJika sangat berbeda atau tidak ada didalam list maka akan masuk ke tugas pribadi.\n\nSekarang fungsi mode ini adalah:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Cek pengirim dan panggil tool yang relevan & kasih tau dari grub apa yang ngirim — LANGSUNG, tanpa teks konfirmasi APAPUN ke User sebelumnya.\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
           }
         },
         "type": "@n8n/n8n-nodes-langchain.agent",
@@ -481,30 +481,11 @@
       },
       {
         "parameters": {
-          "task": "MTA4NTQ2NjcyNzIxMjYzMDM1Mzg6MDow",
-          "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
-          "additionalFields": {}
-        },
-        "type": "n8n-nodes-base.googleTasksTool",
-        "typeVersion": 1,
-        "position": [
-          576,
-          816
-        ],
-        "id": "7a543adc-75f5-4c50-9365-35e2cbdeb7af",
-        "name": "Create a task in Google Tasks",
-        "credentials": {
-          "googleTasksOAuth2Api": {
-            "id": "6bTNNBL6dQ5T8XQE",
-            "name": "Google Tasks account"
-          }
-        }
-      },
-      {
-        "parameters": {
           "toolDescription": "Gunakan alat ini ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan, atau membuat daftar to-do list baru.",
           "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
-          "options": {}
+          "options": {
+            "systemMessage": "Tugas mu adalah membuat mengerjakan semua kebutuhan tentang Google Task dan memilah apakai ini termasuk Task Pribadi Atau HRD.\n\nBerikut catatan yang harus kamu ingat :\n\n##Cara kerjamu adalah = \nSiapa yang meminta? -> [Tools] -> konfirmasi ke AI Induk\n\n## Format membuat tugas adalah\n\nNamaTugas | Deadline (Tugas siapa)\n\nContoh :\nPR matematika | 18 Januari 2027 (HRD)\n\n##Untuk sisanya lakukan seperti biasa, hanya pastikan saja siapa yang minta.\n\n## Jika tidak diketahui siapa yang mengirim maka masukkan saja ke Tugas Pribadi"
+          }
         },
         "type": "@n8n/n8n-nodes-langchain.agentTool",
         "typeVersion": 3,
@@ -552,6 +533,27 @@
       },
       {
         "parameters": {
+          "task": "MTA4NTQ2NjcyNzIxMjYzMDM1Mzg6MDow",
+          "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.googleTasksTool",
+        "typeVersion": 1,
+        "position": [
+          576,
+          816
+        ],
+        "id": "7a543adc-75f5-4c50-9365-35e2cbdeb7af",
+        "name": "Buat Tugas Pribadi",
+        "credentials": {
+          "googleTasksOAuth2Api": {
+            "id": "6bTNNBL6dQ5T8XQE",
+            "name": "Google Tasks account"
+          }
+        }
+      },
+      {
+        "parameters": {
           "operation": "getAll",
           "task": "MTA4NTQ2NjcyNzIxMjYzMDM1Mzg6MDow",
           "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
@@ -564,7 +566,7 @@
           816
         ],
         "id": "7da5bd2c-c205-4f6d-8989-4c037b515bed",
-        "name": "Get many tasks in Google Tasks",
+        "name": "Ambil Tugas Pribadi",
         "credentials": {
           "googleTasksOAuth2Api": {
             "id": "6bTNNBL6dQ5T8XQE",
@@ -585,7 +587,7 @@
           816
         ],
         "id": "1d07f26e-1042-4da4-a2d3-6948f9f0f63e",
-        "name": "Delete a task in Google Tasks",
+        "name": "Hapus tugas pribadi",
         "credentials": {
           "googleTasksOAuth2Api": {
             "id": "6bTNNBL6dQ5T8XQE",
@@ -598,7 +600,9 @@
           "operation": "update",
           "task": "MTA4NTQ2NjcyNzIxMjYzMDM1Mzg6MDow",
           "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}",
-          "updateFields": {}
+          "updateFields": {
+            "status": "completed"
+          }
         },
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
@@ -607,7 +611,95 @@
           816
         ],
         "id": "7b96a0ec-5fbc-415b-8711-31d4d7b28311",
-        "name": "Update a task in Google Tasks",
+        "name": "Perbarui tugas pribadi",
+        "credentials": {
+          "googleTasksOAuth2Api": {
+            "id": "6bTNNBL6dQ5T8XQE",
+            "name": "Google Tasks account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "task": "dDdWRzg5UHVjdWljcHBIdQ",
+          "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.googleTasksTool",
+        "typeVersion": 1,
+        "position": [
+          576,
+          992
+        ],
+        "id": "5ff52d20-e058-4ac3-8bbc-e91b181dc95f",
+        "name": "Buat Tugas HRD",
+        "credentials": {
+          "googleTasksOAuth2Api": {
+            "id": "6bTNNBL6dQ5T8XQE",
+            "name": "Google Tasks account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "task": "dDdWRzg5UHVjdWljcHBIdQ",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.googleTasksTool",
+        "typeVersion": 1,
+        "position": [
+          720,
+          992
+        ],
+        "id": "6d5b3c35-67b1-4c72-aca3-7a906b4305fd",
+        "name": "Ambil Tugas HRD",
+        "credentials": {
+          "googleTasksOAuth2Api": {
+            "id": "6bTNNBL6dQ5T8XQE",
+            "name": "Google Tasks account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "task": "dDdWRzg5UHVjdWljcHBIdQ",
+          "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}",
+          "updateFields": {
+            "status": "completed"
+          }
+        },
+        "type": "n8n-nodes-base.googleTasksTool",
+        "typeVersion": 1,
+        "position": [
+          864,
+          1008
+        ],
+        "id": "2464ab65-458d-448d-8495-7a98a05139ea",
+        "name": "Perbarui tugas HRD",
+        "credentials": {
+          "googleTasksOAuth2Api": {
+            "id": "6bTNNBL6dQ5T8XQE",
+            "name": "Google Tasks account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "task": "dDdWRzg5UHVjdWljcHBIdQ",
+          "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
+        },
+        "type": "n8n-nodes-base.googleTasksTool",
+        "typeVersion": 1,
+        "position": [
+          1024,
+          1008
+        ],
+        "id": "00e1c27d-619d-404d-812a-667d4f4e65e6",
+        "name": "Hapus tugas HRD",
         "credentials": {
           "googleTasksOAuth2Api": {
             "id": "6bTNNBL6dQ5T8XQE",
@@ -823,17 +915,6 @@
           ]
         ]
       },
-      "Create a task in Google Tasks": {
-        "ai_tool": [
-          [
-            {
-              "node": "AI Agent Google Task",
-              "type": "ai_tool",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "AI Agent Google Task": {
         "ai_tool": [
           [
@@ -867,7 +948,7 @@
           ]
         ]
       },
-      "Get many tasks in Google Tasks": {
+      "Buat Tugas Pribadi": {
         "ai_tool": [
           [
             {
@@ -878,7 +959,7 @@
           ]
         ]
       },
-      "Delete a task in Google Tasks": {
+      "Ambil Tugas Pribadi": {
         "ai_tool": [
           [
             {
@@ -889,7 +970,62 @@
           ]
         ]
       },
-      "Update a task in Google Tasks": {
+      "Hapus tugas pribadi": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Task",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Perbarui tugas pribadi": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Task",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Buat Tugas HRD": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Task",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Ambil Tugas HRD": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Task",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Perbarui tugas HRD": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Task",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Hapus tugas HRD": {
         "ai_tool": [
           [
             {
@@ -903,21 +1039,21 @@
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "Update Google task, dan Penambahan multi agent",
+    "name": "Mengenalkan grub HRD kepada folin",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-16T12:11:20.904Z",
-        "id": 39,
+        "createdAt": "2026-06-16T13:55:39.033Z",
+        "id": 43,
         "workflowId": "c517osOLx0Zbnd7M",
-        "versionId": "c6d7506f-d77d-4de4-a575-da732b466f84",
+        "versionId": "6228dafc-b9e8-4df9-83c2-b9ff7b35cb30",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "c6d7506f-d77d-4de4-a575-da732b466f84",
+  "activeVersionId": "6228dafc-b9e8-4df9-83c2-b9ff7b35cb30",
   "connections": {
     "AI Agent": {
       "main": [
@@ -1201,6 +1337,50 @@
           }
         ]
       ]
+    },
+    "Buat Tugas HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Task",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ambil Tugas HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Task",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perbarui tugas HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Task",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hapus tugas HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Task",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-06-13T12:24:31.175Z",
@@ -1218,7 +1398,7 @@
         "promptType": "=define",
         "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
         "options": {
-          "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Panggil tool yang relevan — LANGSUNG, tanpa teks apapun sebelumnya\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
+          "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata, Tapi sebelum itu selalu cek ini dari grub mana.\n\nYang mengechat kali ini adalah : {{ $('WAHA Trigger').item.json.payload.from }}\n\nCek list kode grub dibawah ini, Tidak harus sama persis, yang penting jika menganding kode tersebut, maka itu adalah nama grubnya\n\nBerikut list kode grub :\n\n- REDACTED_GROUP_HRD = HRD\n\nContoh :\nyang mengechat adalah : REDACTED_GROUP_HRD@g.us dan di list ada REDACTED_GROUP_HRD, maka itu adalah HRD, walau dia tidak sama persis.\n\nJika sangat berbeda atau tidak ada didalam list maka akan masuk ke tugas pribadi.\n\nSekarang fungsi mode ini adalah:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Cek pengirim dan panggil tool yang relevan & kasih tau dari grub apa yang ngirim — LANGSUNG, tanpa teks konfirmasi APAPUN ke User sebelumnya.\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -1690,7 +1870,9 @@
       "parameters": {
         "toolDescription": "Gunakan alat ini ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan, atau membuat daftar to-do list baru.",
         "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
-        "options": {}
+        "options": {
+          "systemMessage": "Tugas mu adalah membuat mengerjakan semua kebutuhan tentang Google Task dan memilah apakai ini termasuk Task Pribadi Atau HRD.\n\nBerikut catatan yang harus kamu ingat :\n\n##Cara kerjamu adalah = \nSiapa yang meminta? -> [Tools] -> konfirmasi ke AI Induk\n\n## Format membuat tugas adalah\n\nNamaTugas | Deadline (Tugas siapa)\n\nContoh :\nPR matematika | 18 Januari 2027 (HRD)\n\n##Untuk sisanya lakukan seperti biasa, hanya pastikan saja siapa yang minta.\n\n## Jika tidak diketahui siapa yang mengirim maka masukkan saja ke Tugas Pribadi\n\n## Hanya berikan ke orang yang minta, apa yang punya dia. Jangan Lebih!\nContoh : HRD minta list tugas, maka berikan yang list hrd jangan sama list tugas pribadi."
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 3,
@@ -1805,7 +1987,9 @@
         "operation": "update",
         "task": "MTA4NTQ2NjcyNzIxMjYzMDM1Mzg6MDow",
         "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}",
-        "updateFields": {}
+        "updateFields": {
+          "status": "completed"
+        }
       },
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
@@ -1815,6 +1999,94 @@
       ],
       "id": "7b96a0ec-5fbc-415b-8711-31d4d7b28311",
       "name": "Perbarui tugas pribadi",
+      "credentials": {
+        "googleTasksOAuth2Api": {
+          "id": "6bTNNBL6dQ5T8XQE",
+          "name": "Google Tasks account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "task": "dDdWRzg5UHVjdWljcHBIdQ",
+        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        576,
+        992
+      ],
+      "id": "5ff52d20-e058-4ac3-8bbc-e91b181dc95f",
+      "name": "Buat Tugas HRD",
+      "credentials": {
+        "googleTasksOAuth2Api": {
+          "id": "6bTNNBL6dQ5T8XQE",
+          "name": "Google Tasks account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "task": "dDdWRzg5UHVjdWljcHBIdQ",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        720,
+        992
+      ],
+      "id": "6d5b3c35-67b1-4c72-aca3-7a906b4305fd",
+      "name": "Ambil Tugas HRD",
+      "credentials": {
+        "googleTasksOAuth2Api": {
+          "id": "6bTNNBL6dQ5T8XQE",
+          "name": "Google Tasks account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "task": "dDdWRzg5UHVjdWljcHBIdQ",
+        "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}",
+        "updateFields": {
+          "status": "completed"
+        }
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        864,
+        1008
+      ],
+      "id": "2464ab65-458d-448d-8495-7a98a05139ea",
+      "name": "Perbarui tugas HRD",
+      "credentials": {
+        "googleTasksOAuth2Api": {
+          "id": "6bTNNBL6dQ5T8XQE",
+          "name": "Google Tasks account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "task": "dDdWRzg5UHVjdWljcHBIdQ",
+        "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        1024,
+        1008
+      ],
+      "id": "00e1c27d-619d-404d-812a-667d4f4e65e6",
+      "name": "Hapus tugas HRD",
       "credentials": {
         "googleTasksOAuth2Api": {
           "id": "6bTNNBL6dQ5T8XQE",
@@ -1868,7 +2140,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-16T12:39:22.327Z",
-  "versionCounter": 499,
-  "versionId": "0ec3fa78-51d3-4d6c-b14b-252ef1efa6e6"
+  "updatedAt": "2026-06-16T14:08:00.787Z",
+  "versionCounter": 670,
+  "versionId": "af416a72-4c01-4192-9f0b-616b754d4df7"
 }
