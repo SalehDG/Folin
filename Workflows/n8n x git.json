@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-14T13:56:51.000Z",
-    "createdAt": "2026-06-14T13:55:55.298Z",
-    "versionId": "f3f5fba6-1400-45b0-8cee-8a3251dda22c",
+    "updatedAt": "2026-06-16T13:04:22.000Z",
+    "createdAt": "2026-06-16T13:04:14.447Z",
+    "versionId": "a429cde0-9792-41e3-bbb8-7aa7a638e4ba",
     "workflowId": "pRgtmX9F8Yav0tRI",
     "nodes": [
       {
@@ -246,7 +246,7 @@
             "item": [
               {
                 "hour": 20,
-                "minute": 11
+                "minute": 6
               }
             ]
           }
@@ -516,21 +516,21 @@
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "Perbaiki bug \"=\" pada nama",
+    "name": "Version a429cde0",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-14T13:56:51.276Z",
-        "id": 6,
+        "createdAt": "2026-06-16T13:04:22.951Z",
+        "id": 41,
         "workflowId": "pRgtmX9F8Yav0tRI",
-        "versionId": "f3f5fba6-1400-45b0-8cee-8a3251dda22c",
+        "versionId": "a429cde0-9792-41e3-bbb8-7aa7a638e4ba",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "f3f5fba6-1400-45b0-8cee-8a3251dda22c",
+  "activeVersionId": "a429cde0-9792-41e3-bbb8-7aa7a638e4ba",
   "connections": {
     "new": {
       "main": [
@@ -978,7 +978,7 @@
           "item": [
             {
               "hour": 20,
-              "minute": 11
+              "minute": 6
             }
           ]
         }
@@ -1079,7 +1079,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-14T13:55:55.274Z",
-  "versionCounter": 77,
-  "versionId": "f3f5fba6-1400-45b0-8cee-8a3251dda22c"
+  "updatedAt": "2026-06-16T13:04:14.444Z",
+  "versionCounter": 79,
+  "versionId": "a429cde0-9792-41e3-bbb8-7aa7a638e4ba"
 }
