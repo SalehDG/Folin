@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-16T13:55:39.000Z",
-    "createdAt": "2026-06-16T13:54:05.606Z",
-    "versionId": "6228dafc-b9e8-4df9-83c2-b9ff7b35cb30",
+    "updatedAt": "2026-06-16T18:04:07.000Z",
+    "createdAt": "2026-06-16T18:03:36.581Z",
+    "versionId": "c9236a95-2222-4824-ab69-e536ee0ab4c3",
     "workflowId": "c517osOLx0Zbnd7M",
     "nodes": [
       {
@@ -11,7 +11,7 @@
           "promptType": "=define",
           "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
           "options": {
-            "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata, Tapi sebelum itu selalu cek ini dari grub mana.\n\nYang mengechat kali ini adalah : {{ $('WAHA Trigger').item.json.payload.from }}\n\nCek list kode grub dibawah ini, Tidak harus sama persis, yang penting jika menganding kode tersebut, maka itu adalah nama grubnya\n\nBerikut list kode grub :\n\n- REDACTED_GROUP_HRD = HRD\n\nContoh :\nyang mengechat adalah : REDACTED_GROUP_HRD@g.us dan di list ada REDACTED_GROUP_HRD, maka itu adalah HRD, walau dia tidak sama persis.\n\nJika sangat berbeda atau tidak ada didalam list maka akan masuk ke tugas pribadi.\n\nSekarang fungsi mode ini adalah:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Cek pengirim dan panggil tool yang relevan & kasih tau dari grub apa yang ngirim — LANGSUNG, tanpa teks konfirmasi APAPUN ke User sebelumnya.\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
+            "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata, Tapi sebelum itu selalu cek ini dari grub mana.\n\nYang mengechat kali ini adalah : {{ $('WAHA Trigger').item.json.payload.from }}\n\nCek list kode grub dibawah ini, Tidak harus sama persis, yang penting jika menganding kode tersebut, maka itu adalah nama grubnya\n\nBerikut list kode grub dan pengguna :\n\n- REDACTED_GROUP_HRD = Grub HRD\n- REDACTED_OWNER_ID = Saleh\n- REDACTED_GROUP_PERSONAL = Grub pribadi kamu dan saleh\n\nContoh :\nyang mengechat adalah : REDACTED_GROUP_HRD@g.us dan di list ada REDACTED_GROUP_HRD, maka itu adalah HRD, walau dia tidak sama persis.\n\nJika sangat berbeda atau tidak ada didalam list maka tolak dia dengan halus ya, beritahu dia tidak akses dan hanya dapat akses untuk mengobrol.\n\nSekarang fungsi mode ini adalah:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Cek pengirim dan panggil tool yang relevan & kasih tau dari grub apa yang ngirim — LANGSUNG, tanpa teks konfirmasi APAPUN ke User sebelumnya.\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
           }
         },
         "type": "@n8n/n8n-nodes-langchain.agent",
@@ -22,52 +22,6 @@
         ],
         "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
         "name": "AI Agent"
-      },
-      {
-        "parameters": {},
-        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
-        "typeVersion": 1,
-        "position": [
-          -624,
-          1376
-        ],
-        "id": "e289f416-3046-4c7f-89ea-953232d3c387",
-        "name": "Embeddings Google Gemini",
-        "credentials": {
-          "googlePalmApi": {
-            "id": "k27SnwImRZKrqF5r",
-            "name": "Google Gemini(PaLM) Api account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "mode": "retrieve-as-tool",
-          "toolDescription": "Gunakan data dari database ini sebagai patokan utama, jika tidak ada gunakan pengetahuanmu sendiri",
-          "tableName": {
-            "__rl": true,
-            "value": "document",
-            "mode": "list",
-            "cachedResultName": "document"
-          },
-          "topK": 20,
-          "useReranker": true,
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-        "typeVersion": 1.3,
-        "position": [
-          0,
-          1136
-        ],
-        "id": "7d1302c4-2821-4d5c-97e6-5a664b023c45",
-        "name": "Supabase Vector Store1",
-        "credentials": {
-          "supabaseApi": {
-            "id": "fJAk2egDiCh6MW5U",
-            "name": "Supabase account"
-          }
-        }
       },
       {
         "parameters": {
@@ -86,63 +40,6 @@
           "googlePalmApi": {
             "id": "k27SnwImRZKrqF5r",
             "name": "Google Gemini(PaLM) Api account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "mode": "insert",
-          "tableName": {
-            "__rl": true,
-            "value": "document",
-            "mode": "list",
-            "cachedResultName": "document"
-          },
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-        "typeVersion": 1.3,
-        "position": [
-          -608,
-          1136
-        ],
-        "id": "fad0204c-c49e-4fd0-83d7-983946e1a313",
-        "name": "Supabase Vector Store",
-        "credentials": {
-          "supabaseApi": {
-            "id": "fJAk2egDiCh6MW5U",
-            "name": "Supabase account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "dataType": "binary",
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
-        "typeVersion": 1.1,
-        "position": [
-          -400,
-          1344
-        ],
-        "id": "fd6e4d32-b318-4aeb-baa9-39fa6a1d5293",
-        "name": "Default Data Loader"
-      },
-      {
-        "parameters": {},
-        "type": "@n8n/n8n-nodes-langchain.rerankerCohere",
-        "typeVersion": 1,
-        "position": [
-          208,
-          1392
-        ],
-        "id": "9991104c-aa5f-4019-bf99-0c7e0a8e6d87",
-        "name": "Reranker Cohere",
-        "credentials": {
-          "cohereApi": {
-            "id": "PC8dRyj4ikBu79tC",
-            "name": "Cohere account"
           }
         }
       },
@@ -317,23 +214,6 @@
         "name": "If1"
       },
       {
-        "parameters": {},
-        "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
-        "typeVersion": 1,
-        "position": [
-          -16,
-          1328
-        ],
-        "id": "2031772d-2718-46c9-941e-d68cbf10a533",
-        "name": "Embeddings Google Gemini1",
-        "credentials": {
-          "googlePalmApi": {
-            "id": "tgCsIV8J2paiV6A2",
-            "name": "RAG API"
-          }
-        }
-      },
-      {
         "parameters": {
           "amount": "=4"
         },
@@ -346,118 +226,6 @@
         "id": "b94229d1-aa2f-485e-9ce3-c64248644a8d",
         "name": "Wait",
         "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
-      },
-      {
-        "parameters": {
-          "calendar": {
-            "__rl": true,
-            "value": "REDACTED_EMAIL@example.com",
-            "mode": "list",
-            "cachedResultName": "REDACTED_EMAIL@example.com"
-          },
-          "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
-          "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
-          "additionalFields": {
-            "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
-          }
-        },
-        "type": "n8n-nodes-base.googleCalendarTool",
-        "typeVersion": 1.3,
-        "position": [
-          1520,
-          944
-        ],
-        "id": "d989b50b-1021-47b0-86e4-18be388ceed5",
-        "name": "Create an event in Google Calendar",
-        "credentials": {
-          "googleCalendarOAuth2Api": {
-            "id": "8U792wK9xBpopW0K",
-            "name": "Google Calendar account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "operation": "getAll",
-          "calendar": {
-            "__rl": true,
-            "value": "REDACTED_EMAIL@example.com",
-            "mode": "list",
-            "cachedResultName": "REDACTED_EMAIL@example.com"
-          },
-          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
-          "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
-          "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.googleCalendarTool",
-        "typeVersion": 1.3,
-        "position": [
-          1696,
-          944
-        ],
-        "id": "ce341f7d-a8f7-4633-8d6b-82f2dfe12e54",
-        "name": "Get many events in Google Calendar",
-        "credentials": {
-          "googleCalendarOAuth2Api": {
-            "id": "8U792wK9xBpopW0K",
-            "name": "Google Calendar account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "operation": "delete",
-          "calendar": {
-            "__rl": true,
-            "value": "REDACTED_EMAIL@example.com",
-            "mode": "list",
-            "cachedResultName": "REDACTED_EMAIL@example.com"
-          },
-          "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
-          "options": {}
-        },
-        "type": "n8n-nodes-base.googleCalendarTool",
-        "typeVersion": 1.3,
-        "position": [
-          2032,
-          944
-        ],
-        "id": "f1da765d-9ba5-43d9-8b89-b1b2f6d90119",
-        "name": "Delete an event in Google Calendar",
-        "credentials": {
-          "googleCalendarOAuth2Api": {
-            "id": "8U792wK9xBpopW0K",
-            "name": "Google Calendar account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "operation": "update",
-          "calendar": {
-            "__rl": true,
-            "value": "REDACTED_EMAIL@example.com",
-            "mode": "list",
-            "cachedResultName": "REDACTED_EMAIL@example.com"
-          },
-          "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
-          "updateFields": {}
-        },
-        "type": "n8n-nodes-base.googleCalendarTool",
-        "typeVersion": 1.3,
-        "position": [
-          1872,
-          944
-        ],
-        "id": "d7ca9901-55c9-4f01-9fd5-e1a72559cb0c",
-        "name": "Update an event in Google Calendar",
-        "credentials": {
-          "googleCalendarOAuth2Api": {
-            "id": "8U792wK9xBpopW0K",
-            "name": "Google Calendar account"
-          }
-        }
       },
       {
         "parameters": {
@@ -481,10 +249,10 @@
       },
       {
         "parameters": {
-          "toolDescription": "Gunakan alat ini ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan, atau membuat daftar to-do list baru.",
+          "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan (to-do list), atau menanyakan daftar pekerjaan yang belum selesai.",
           "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
           "options": {
-            "systemMessage": "Tugas mu adalah membuat mengerjakan semua kebutuhan tentang Google Task dan memilah apakai ini termasuk Task Pribadi Atau HRD.\n\nBerikut catatan yang harus kamu ingat :\n\n##Cara kerjamu adalah = \nSiapa yang meminta? -> [Tools] -> konfirmasi ke AI Induk\n\n## Format membuat tugas adalah\n\nNamaTugas | Deadline (Tugas siapa)\n\nContoh :\nPR matematika | 18 Januari 2027 (HRD)\n\n##Untuk sisanya lakukan seperti biasa, hanya pastikan saja siapa yang minta.\n\n## Jika tidak diketahui siapa yang mengirim maka masukkan saja ke Tugas Pribadi"
+            "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Tasks dan memilah apakah tugas ini termasuk ke Task Pribadi atau Task HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail tugas -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Penulisan Tugas (Title):\n   Nama Tugas | Deadline (Tugas Siapa)\n   Contoh: Rekap Absensi Karyawan | 18 Juni 2026 (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n   - Hanya berikan list/daftar tugas kepada orang/grup yang berhak. Jika HRD meminta list tugas, maka berikan list khusus HRD saja. Jangan pernah dicampur atau dilebihkan dengan list tugas Pribadi!\n\n- Saleh dan grub khusus kamu dan saleh boleh mengakses semua jadwal\n"
           }
         },
         "type": "@n8n/n8n-nodes-langchain.agentTool",
@@ -518,9 +286,12 @@
       },
       {
         "parameters": {
-          "toolDescription": "Gunakan tool ini jika user meminta sesuatu yang berhubungan dengan Jadwal atau Google Calendar",
+          "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk membuat jadwal, mengatur waktu rapat, mencatat acara, atau menanyakan agenda di kalender.",
           "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
-          "options": {}
+          "options": {
+            "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n   - Hanya berikan informasi jadwal kepada orang/grup yang berhak. Jika HRD meminta jadwal, berikan jadwal HRD saja. Jangan melebih-lebihkan atau membocorkan jadwal Pribadi ke HRD!\n\n- Saleh dan grub khusus kamu dan saleh boleh mengakses semua jadwal\n",
+            "autoSaveHighlightedData": false
+          }
         },
         "type": "@n8n/n8n-nodes-langchain.agentTool",
         "typeVersion": 3,
@@ -562,7 +333,7 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          720,
+          736,
           816
         ],
         "id": "7da5bd2c-c205-4f6d-8989-4c037b515bed",
@@ -583,7 +354,7 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          1008,
+          1024,
           816
         ],
         "id": "1d07f26e-1042-4da4-a2d3-6948f9f0f63e",
@@ -607,7 +378,7 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          864,
+          880,
           816
         ],
         "id": "7b96a0ec-5fbc-415b-8711-31d4d7b28311",
@@ -650,7 +421,7 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          720,
+          736,
           992
         ],
         "id": "6d5b3c35-67b1-4c72-aca3-7a906b4305fd",
@@ -674,8 +445,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          864,
-          1008
+          896,
+          992
         ],
         "id": "2464ab65-458d-448d-8495-7a98a05139ea",
         "name": "Perbarui tugas HRD",
@@ -695,8 +466,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          1024,
-          1008
+          1056,
+          992
         ],
         "id": "00e1c27d-619d-404d-812a-667d4f4e65e6",
         "name": "Hapus tugas HRD",
@@ -704,6 +475,230 @@
           "googleTasksOAuth2Api": {
             "id": "6bTNNBL6dQ5T8XQE",
             "name": "Google Tasks account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "calendar": {
+            "__rl": true,
+            "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+            "mode": "list",
+            "cachedResultName": "HRD"
+          },
+          "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+          "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+          "additionalFields": {
+            "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+          }
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          1520,
+          1152
+        ],
+        "id": "7fdbea51-d4fe-40cc-85ba-64bd1a5073b7",
+        "name": "Buat Jadwal HRD",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "calendar": {
+            "__rl": true,
+            "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+            "mode": "list",
+            "cachedResultName": "HRD"
+          },
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+          "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          1712,
+          1152
+        ],
+        "id": "f88ebf37-0ade-4e82-a4fa-661c36cde2d4",
+        "name": "Ambil jadwal HRD",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "calendar": {
+            "__rl": true,
+            "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+            "mode": "list",
+            "cachedResultName": "HRD"
+          },
+          "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+          "updateFields": {}
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          1888,
+          1152
+        ],
+        "id": "0aef0102-a349-4bf3-aae1-031b49104f84",
+        "name": "Perbaharui data HRD",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "update",
+          "calendar": {
+            "__rl": true,
+            "value": "REDACTED_EMAIL@example.com",
+            "mode": "list",
+            "cachedResultName": "REDACTED_EMAIL@example.com"
+          },
+          "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+          "updateFields": {}
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          1872,
+          944
+        ],
+        "id": "d7ca9901-55c9-4f01-9fd5-e1a72559cb0c",
+        "name": "Perbaharui jadwal pribadi",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "calendar": {
+            "__rl": true,
+            "value": "REDACTED_EMAIL@example.com",
+            "mode": "list",
+            "cachedResultName": "REDACTED_EMAIL@example.com"
+          },
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+          "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          1696,
+          944
+        ],
+        "id": "ce341f7d-a8f7-4633-8d6b-82f2dfe12e54",
+        "name": "Ambil jadwal pribadi1",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "calendar": {
+            "__rl": true,
+            "value": "REDACTED_EMAIL@example.com",
+            "mode": "list",
+            "cachedResultName": "REDACTED_EMAIL@example.com"
+          },
+          "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+          "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+          "additionalFields": {
+            "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+          }
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          1520,
+          944
+        ],
+        "id": "d989b50b-1021-47b0-86e4-18be388ceed5",
+        "name": "Bikin jadwal pribadi",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "calendar": {
+            "__rl": true,
+            "value": "REDACTED_EMAIL@example.com",
+            "mode": "list",
+            "cachedResultName": "REDACTED_EMAIL@example.com"
+          },
+          "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          2032,
+          944
+        ],
+        "id": "f1da765d-9ba5-43d9-8b89-b1b2f6d90119",
+        "name": "Hapus jadwal pribadi",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "delete",
+          "calendar": {
+            "__rl": true,
+            "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+            "mode": "list",
+            "cachedResultName": "HRD"
+          },
+          "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          2048,
+          1152
+        ],
+        "id": "7ff920e4-3f21-4125-9e2a-7451d78d8d91",
+        "name": "Hapus data HRD",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
           }
         }
       }
@@ -720,45 +715,12 @@
           ]
         ]
       },
-      "Embeddings Google Gemini": {
-        "ai_embedding": [
-          [
-            {
-              "node": "Supabase Vector Store",
-              "type": "ai_embedding",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Google Gemini Chat Model": {
         "ai_languageModel": [
           [
             {
               "node": "AI Agent",
               "type": "ai_languageModel",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Default Data Loader": {
-        "ai_document": [
-          [
-            {
-              "node": "Supabase Vector Store",
-              "type": "ai_document",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Reranker Cohere": {
-        "ai_reranker": [
-          [
-            {
-              "node": "Supabase Vector Store1",
-              "type": "ai_reranker",
               "index": 0
             }
           ]
@@ -838,67 +800,12 @@
           ]
         ]
       },
-      "Embeddings Google Gemini1": {
-        "ai_embedding": [
-          [
-            {
-              "node": "Supabase Vector Store1",
-              "type": "ai_embedding",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Wait": {
         "main": [
           [
             {
               "node": "Start Typing",
               "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Create an event in Google Calendar": {
-        "ai_tool": [
-          [
-            {
-              "node": "AI Agent Google Calendar",
-              "type": "ai_tool",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Get many events in Google Calendar": {
-        "ai_tool": [
-          [
-            {
-              "node": "AI Agent Google Calendar",
-              "type": "ai_tool",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Update an event in Google Calendar": {
-        "ai_tool": [
-          [
-            {
-              "node": "AI Agent Google Calendar",
-              "type": "ai_tool",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Delete an event in Google Calendar": {
-        "ai_tool": [
-          [
-            {
-              "node": "AI Agent Google Calendar",
-              "type": "ai_tool",
               "index": 0
             }
           ]
@@ -1035,25 +942,113 @@
             }
           ]
         ]
+      },
+      "Buat Jadwal HRD": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Calendar",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Ambil jadwal HRD": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Calendar",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Perbaharui data HRD": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Calendar",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Perbaharui jadwal pribadi": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Calendar",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Ambil jadwal pribadi1": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Calendar",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Bikin jadwal pribadi": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Calendar",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Hapus jadwal pribadi": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Calendar",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Hapus data HRD": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Google Calendar",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "Mengenalkan grub HRD kepada folin",
+    "name": "Menambah siapa saleh, dan list grub yang di izinkan menggunakan tools",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-16T13:55:39.033Z",
-        "id": 43,
+        "createdAt": "2026-06-16T18:04:07.567Z",
+        "id": 53,
         "workflowId": "c517osOLx0Zbnd7M",
-        "versionId": "6228dafc-b9e8-4df9-83c2-b9ff7b35cb30",
+        "versionId": "c9236a95-2222-4824-ab69-e536ee0ab4c3",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "6228dafc-b9e8-4df9-83c2-b9ff7b35cb30",
+  "activeVersionId": "c9236a95-2222-4824-ab69-e536ee0ab4c3",
   "connections": {
     "AI Agent": {
       "main": [
@@ -1066,45 +1061,12 @@
         ]
       ]
     },
-    "Embeddings Google Gemini": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Supabase Vector Store",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
           {
             "node": "AI Agent",
             "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Default Data Loader": {
-      "ai_document": [
-        [
-          {
-            "node": "Supabase Vector Store",
-            "type": "ai_document",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Reranker Cohere": {
-      "ai_reranker": [
-        [
-          {
-            "node": "Supabase Vector Store1",
-            "type": "ai_reranker",
             "index": 0
           }
         ]
@@ -1184,67 +1146,12 @@
         ]
       ]
     },
-    "Embeddings Google Gemini1": {
-      "ai_embedding": [
-        [
-          {
-            "node": "Supabase Vector Store1",
-            "type": "ai_embedding",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Wait": {
       "main": [
         [
           {
             "node": "Start Typing",
             "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Create an event in Google Calendar": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent Google Calendar",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Get many events in Google Calendar": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent Google Calendar",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Update an event in Google Calendar": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent Google Calendar",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Delete an event in Google Calendar": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent Google Calendar",
-            "type": "ai_tool",
             "index": 0
           }
         ]
@@ -1381,6 +1288,105 @@
           }
         ]
       ]
+    },
+    "Buat Jadwal HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Calendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ambil jadwal HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Calendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perbaharui data HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Calendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Perbaharui jadwal pribadi": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Calendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ambil jadwal pribadi1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Calendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Bikin jadwal pribadi": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Calendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hapus jadwal pribadi": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Calendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Hapus data HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Google Calendar",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-06-13T12:24:31.175Z",
@@ -1398,7 +1404,7 @@
         "promptType": "=define",
         "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
         "options": {
-          "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata, Tapi sebelum itu selalu cek ini dari grub mana.\n\nYang mengechat kali ini adalah : {{ $('WAHA Trigger').item.json.payload.from }}\n\nCek list kode grub dibawah ini, Tidak harus sama persis, yang penting jika menganding kode tersebut, maka itu adalah nama grubnya\n\nBerikut list kode grub :\n\n- REDACTED_GROUP_HRD = HRD\n\nContoh :\nyang mengechat adalah : REDACTED_GROUP_HRD@g.us dan di list ada REDACTED_GROUP_HRD, maka itu adalah HRD, walau dia tidak sama persis.\n\nJika sangat berbeda atau tidak ada didalam list maka akan masuk ke tugas pribadi.\n\nSekarang fungsi mode ini adalah:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Cek pengirim dan panggil tool yang relevan & kasih tau dari grub apa yang ngirim — LANGSUNG, tanpa teks konfirmasi APAPUN ke User sebelumnya.\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
+          "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata, Tapi sebelum itu selalu cek ini dari grub mana.\n\nYang mengechat kali ini adalah : {{ $('WAHA Trigger').item.json.payload.from }}\n\nCek list kode grub dibawah ini, Tidak harus sama persis, yang penting jika menganding kode tersebut, maka itu adalah nama grubnya\n\nBerikut list kode grub dan pengguna :\n\n- REDACTED_GROUP_HRD = Grub HRD\n- REDACTED_OWNER_ID = Saleh\n- REDACTED_GROUP_PERSONAL = Grub pribadi kamu dan saleh\n\nContoh :\nyang mengechat adalah : REDACTED_GROUP_HRD@g.us dan di list ada REDACTED_GROUP_HRD, maka itu adalah HRD, walau dia tidak sama persis.\n\nJika sangat berbeda atau tidak ada didalam list maka tolak dia dengan halus ya, beritahu dia tidak akses dan hanya dapat akses untuk mengobrol.\n\nSekarang fungsi mode ini adalah:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Cek pengirim dan panggil tool yang relevan & kasih tau dari grub apa yang ngirim — LANGSUNG, tanpa teks konfirmasi APAPUN ke User sebelumnya.\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -1409,52 +1415,6 @@
       ],
       "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
       "name": "AI Agent"
-    },
-    {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        -624,
-        1376
-      ],
-      "id": "e289f416-3046-4c7f-89ea-953232d3c387",
-      "name": "Embeddings Google Gemini",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "k27SnwImRZKrqF5r",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "retrieve-as-tool",
-        "toolDescription": "Gunakan data dari database ini sebagai patokan utama, jika tidak ada gunakan pengetahuanmu sendiri",
-        "tableName": {
-          "__rl": true,
-          "value": "document",
-          "mode": "list",
-          "cachedResultName": "document"
-        },
-        "topK": 20,
-        "useReranker": true,
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-      "typeVersion": 1.3,
-      "position": [
-        0,
-        1136
-      ],
-      "id": "7d1302c4-2821-4d5c-97e6-5a664b023c45",
-      "name": "Supabase Vector Store1",
-      "credentials": {
-        "supabaseApi": {
-          "id": "fJAk2egDiCh6MW5U",
-          "name": "Supabase account"
-        }
-      }
     },
     {
       "parameters": {
@@ -1473,63 +1433,6 @@
         "googlePalmApi": {
           "id": "k27SnwImRZKrqF5r",
           "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "mode": "insert",
-        "tableName": {
-          "__rl": true,
-          "value": "document",
-          "mode": "list",
-          "cachedResultName": "document"
-        },
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
-      "typeVersion": 1.3,
-      "position": [
-        -608,
-        1136
-      ],
-      "id": "fad0204c-c49e-4fd0-83d7-983946e1a313",
-      "name": "Supabase Vector Store",
-      "credentials": {
-        "supabaseApi": {
-          "id": "fJAk2egDiCh6MW5U",
-          "name": "Supabase account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "dataType": "binary",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
-      "typeVersion": 1.1,
-      "position": [
-        -400,
-        1344
-      ],
-      "id": "fd6e4d32-b318-4aeb-baa9-39fa6a1d5293",
-      "name": "Default Data Loader"
-    },
-    {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.rerankerCohere",
-      "typeVersion": 1,
-      "position": [
-        208,
-        1392
-      ],
-      "id": "9991104c-aa5f-4019-bf99-0c7e0a8e6d87",
-      "name": "Reranker Cohere",
-      "credentials": {
-        "cohereApi": {
-          "id": "PC8dRyj4ikBu79tC",
-          "name": "Cohere account"
         }
       }
     },
@@ -1704,23 +1607,6 @@
       "name": "If1"
     },
     {
-      "parameters": {},
-      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
-      "typeVersion": 1,
-      "position": [
-        -16,
-        1328
-      ],
-      "id": "2031772d-2718-46c9-941e-d68cbf10a533",
-      "name": "Embeddings Google Gemini1",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "tgCsIV8J2paiV6A2",
-          "name": "RAG API"
-        }
-      }
-    },
-    {
       "parameters": {
         "amount": "=4"
       },
@@ -1733,118 +1619,6 @@
       "id": "b94229d1-aa2f-485e-9ce3-c64248644a8d",
       "name": "Wait",
       "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
-    },
-    {
-      "parameters": {
-        "calendar": {
-          "__rl": true,
-          "value": "REDACTED_EMAIL@example.com",
-          "mode": "list",
-          "cachedResultName": "REDACTED_EMAIL@example.com"
-        },
-        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
-        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
-        "additionalFields": {
-          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
-        }
-      },
-      "type": "n8n-nodes-base.googleCalendarTool",
-      "typeVersion": 1.3,
-      "position": [
-        1520,
-        944
-      ],
-      "id": "d989b50b-1021-47b0-86e4-18be388ceed5",
-      "name": "Create an event in Google Calendar",
-      "credentials": {
-        "googleCalendarOAuth2Api": {
-          "id": "8U792wK9xBpopW0K",
-          "name": "Google Calendar account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "getAll",
-        "calendar": {
-          "__rl": true,
-          "value": "REDACTED_EMAIL@example.com",
-          "mode": "list",
-          "cachedResultName": "REDACTED_EMAIL@example.com"
-        },
-        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
-        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
-        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleCalendarTool",
-      "typeVersion": 1.3,
-      "position": [
-        1696,
-        944
-      ],
-      "id": "ce341f7d-a8f7-4633-8d6b-82f2dfe12e54",
-      "name": "Get many events in Google Calendar",
-      "credentials": {
-        "googleCalendarOAuth2Api": {
-          "id": "8U792wK9xBpopW0K",
-          "name": "Google Calendar account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "delete",
-        "calendar": {
-          "__rl": true,
-          "value": "REDACTED_EMAIL@example.com",
-          "mode": "list",
-          "cachedResultName": "REDACTED_EMAIL@example.com"
-        },
-        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.googleCalendarTool",
-      "typeVersion": 1.3,
-      "position": [
-        2032,
-        944
-      ],
-      "id": "f1da765d-9ba5-43d9-8b89-b1b2f6d90119",
-      "name": "Delete an event in Google Calendar",
-      "credentials": {
-        "googleCalendarOAuth2Api": {
-          "id": "8U792wK9xBpopW0K",
-          "name": "Google Calendar account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "operation": "update",
-        "calendar": {
-          "__rl": true,
-          "value": "REDACTED_EMAIL@example.com",
-          "mode": "list",
-          "cachedResultName": "REDACTED_EMAIL@example.com"
-        },
-        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
-        "updateFields": {}
-      },
-      "type": "n8n-nodes-base.googleCalendarTool",
-      "typeVersion": 1.3,
-      "position": [
-        1872,
-        944
-      ],
-      "id": "d7ca9901-55c9-4f01-9fd5-e1a72559cb0c",
-      "name": "Update an event in Google Calendar",
-      "credentials": {
-        "googleCalendarOAuth2Api": {
-          "id": "8U792wK9xBpopW0K",
-          "name": "Google Calendar account"
-        }
-      }
     },
     {
       "parameters": {
@@ -1868,10 +1642,10 @@
     },
     {
       "parameters": {
-        "toolDescription": "Gunakan alat ini ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan, atau membuat daftar to-do list baru.",
+        "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan (to-do list), atau menanyakan daftar pekerjaan yang belum selesai.",
         "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
         "options": {
-          "systemMessage": "Tugas mu adalah membuat mengerjakan semua kebutuhan tentang Google Task dan memilah apakai ini termasuk Task Pribadi Atau HRD.\n\nBerikut catatan yang harus kamu ingat :\n\n##Cara kerjamu adalah = \nSiapa yang meminta? -> [Tools] -> konfirmasi ke AI Induk\n\n## Format membuat tugas adalah\n\nNamaTugas | Deadline (Tugas siapa)\n\nContoh :\nPR matematika | 18 Januari 2027 (HRD)\n\n##Untuk sisanya lakukan seperti biasa, hanya pastikan saja siapa yang minta.\n\n## Jika tidak diketahui siapa yang mengirim maka masukkan saja ke Tugas Pribadi\n\n## Hanya berikan ke orang yang minta, apa yang punya dia. Jangan Lebih!\nContoh : HRD minta list tugas, maka berikan yang list hrd jangan sama list tugas pribadi."
+          "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Tasks dan memilah apakah tugas ini termasuk ke Task Pribadi atau Task HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail tugas -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Penulisan Tugas (Title):\n   Nama Tugas | Deadline (Tugas Siapa)\n   Contoh: Rekap Absensi Karyawan | 18 Juni 2026 (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n   - Hanya berikan list/daftar tugas kepada orang/grup yang berhak. Jika HRD meminta list tugas, maka berikan list khusus HRD saja. Jangan pernah dicampur atau dilebihkan dengan list tugas Pribadi!\n\n- Saleh dan grub khusus kamu dan saleh boleh mengakses semua jadwal\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agentTool",
@@ -1905,9 +1679,12 @@
     },
     {
       "parameters": {
-        "toolDescription": "Gunakan tool ini jika user meminta sesuatu yang berhubungan dengan Jadwal atau Google Calendar",
+        "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk membuat jadwal, mengatur waktu rapat, mencatat acara, atau menanyakan agenda di kalender.",
         "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
-        "options": {}
+        "options": {
+          "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n   - Hanya berikan informasi jadwal kepada orang/grup yang berhak. Jika HRD meminta jadwal, berikan jadwal HRD saja. Jangan melebih-lebihkan atau membocorkan jadwal Pribadi ke HRD!\n\n- Saleh dan grub khusus kamu dan saleh boleh mengakses semua jadwal\n",
+          "autoSaveHighlightedData": false
+        }
       },
       "type": "@n8n/n8n-nodes-langchain.agentTool",
       "typeVersion": 3,
@@ -1949,7 +1726,7 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        720,
+        736,
         816
       ],
       "id": "7da5bd2c-c205-4f6d-8989-4c037b515bed",
@@ -1970,7 +1747,7 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        1008,
+        1024,
         816
       ],
       "id": "1d07f26e-1042-4da4-a2d3-6948f9f0f63e",
@@ -1994,7 +1771,7 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        864,
+        880,
         816
       ],
       "id": "7b96a0ec-5fbc-415b-8711-31d4d7b28311",
@@ -2037,7 +1814,7 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        720,
+        736,
         992
       ],
       "id": "6d5b3c35-67b1-4c72-aca3-7a906b4305fd",
@@ -2061,8 +1838,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        864,
-        1008
+        896,
+        992
       ],
       "id": "2464ab65-458d-448d-8495-7a98a05139ea",
       "name": "Perbarui tugas HRD",
@@ -2082,8 +1859,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        1024,
-        1008
+        1056,
+        992
       ],
       "id": "00e1c27d-619d-404d-812a-667d4f4e65e6",
       "name": "Hapus tugas HRD",
@@ -2093,28 +1870,254 @@
           "name": "Google Tasks account"
         }
       }
-    }
-  ],
-  "pinData": {
-    "Supabase Vector Store1": [
-      {
-        "json": {
-          "name": "First item",
-          "code": 1
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "HRD"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
         }
       },
-      {
-        "json": {
-          "name": "Second item",
-          "code": 2
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1520,
+        1152
+      ],
+      "id": "7fdbea51-d4fe-40cc-85ba-64bd1a5073b7",
+      "name": "Buat Jadwal HRD",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
         }
       }
-    ]
-  },
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "HRD"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1712,
+        1152
+      ],
+      "id": "f88ebf37-0ade-4e82-a4fa-661c36cde2d4",
+      "name": "Ambil jadwal HRD",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "HRD"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1888,
+        1152
+      ],
+      "id": "0aef0102-a349-4bf3-aae1-031b49104f84",
+      "name": "Perbaharui data HRD",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "REDACTED_EMAIL@example.com",
+          "mode": "list",
+          "cachedResultName": "REDACTED_EMAIL@example.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1872,
+        944
+      ],
+      "id": "d7ca9901-55c9-4f01-9fd5-e1a72559cb0c",
+      "name": "Perbaharui jadwal pribadi",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "REDACTED_EMAIL@example.com",
+          "mode": "list",
+          "cachedResultName": "REDACTED_EMAIL@example.com"
+        },
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1696,
+        944
+      ],
+      "id": "ce341f7d-a8f7-4633-8d6b-82f2dfe12e54",
+      "name": "Ambil jadwal pribadi1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "REDACTED_EMAIL@example.com",
+          "mode": "list",
+          "cachedResultName": "REDACTED_EMAIL@example.com"
+        },
+        "start": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "summary": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Summary', ``, 'string') }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        1520,
+        944
+      ],
+      "id": "d989b50b-1021-47b0-86e4-18be388ceed5",
+      "name": "Bikin jadwal pribadi",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "REDACTED_EMAIL@example.com",
+          "mode": "list",
+          "cachedResultName": "REDACTED_EMAIL@example.com"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        2032,
+        944
+      ],
+      "id": "f1da765d-9ba5-43d9-8b89-b1b2f6d90119",
+      "name": "Hapus jadwal pribadi",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "HRD"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        2048,
+        1152
+      ],
+      "id": "7ff920e4-3f21-4125-9e2a-7451d78d8d91",
+      "name": "Hapus data HRD",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Gunakan tool ini untuk mengambil data dari ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 3,
+      "position": [
+        1072,
+        368
+      ],
+      "id": "d878d70b-0fab-444e-9ded-26a66ce98c5c",
+      "name": "AI Agent Tool"
+    }
+  ],
+  "pinData": {},
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Jakarta",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "shared": [
     {
@@ -2140,7 +2143,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-16T14:08:00.787Z",
-  "versionCounter": 670,
-  "versionId": "af416a72-4c01-4192-9f0b-616b754d4df7"
+  "updatedAt": "2026-06-16T18:11:55.137Z",
+  "versionCounter": 759,
+  "versionId": "24444c1a-6a00-4a4f-a158-6e7437543885"
 }
