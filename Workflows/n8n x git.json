@@ -527,6 +527,22 @@
         "versionId": "a429cde0-9792-41e3-bbb8-7aa7a638e4ba",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
+      },
+      {
+        "createdAt": "2026-06-16T17:22:04.280Z",
+        "id": 49,
+        "workflowId": "pRgtmX9F8Yav0tRI",
+        "versionId": "a429cde0-9792-41e3-bbb8-7aa7a638e4ba",
+        "event": "activated",
+        "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
+      },
+      {
+        "createdAt": "2026-06-16T17:22:04.225Z",
+        "id": 48,
+        "workflowId": "pRgtmX9F8Yav0tRI",
+        "versionId": "a429cde0-9792-41e3-bbb8-7aa7a638e4ba",
+        "event": "deactivated",
+        "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
@@ -1053,7 +1069,10 @@
   "settings": {
     "executionOrder": "v1",
     "binaryMode": "separate",
-    "availableInMCP": false
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "timezone": "Asia/Jakarta",
+    "callerPolicy": "workflowsFromSameOwner"
   },
   "shared": [
     {
@@ -1079,7 +1098,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-16T13:04:14.444Z",
-  "versionCounter": 79,
+  "updatedAt": "2026-06-16T17:22:04.137Z",
+  "versionCounter": 80,
   "versionId": "a429cde0-9792-41e3-bbb8-7aa7a638e4ba"
 }
