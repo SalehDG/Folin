@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-16T18:04:07.000Z",
-    "createdAt": "2026-06-16T18:03:36.581Z",
-    "versionId": "c9236a95-2222-4824-ab69-e536ee0ab4c3",
+    "updatedAt": "2026-06-17T02:52:41.000Z",
+    "createdAt": "2026-06-17T02:52:40.556Z",
+    "versionId": "be2bad12-5d44-40a7-b0fa-88e6ee5cf987",
     "workflowId": "c517osOLx0Zbnd7M",
     "nodes": [
       {
@@ -11,7 +11,7 @@
           "promptType": "=define",
           "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
           "options": {
-            "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata, Tapi sebelum itu selalu cek ini dari grub mana.\n\nYang mengechat kali ini adalah : {{ $('WAHA Trigger').item.json.payload.from }}\n\nCek list kode grub dibawah ini, Tidak harus sama persis, yang penting jika menganding kode tersebut, maka itu adalah nama grubnya\n\nBerikut list kode grub dan pengguna :\n\n- REDACTED_GROUP_HRD = Grub HRD\n- REDACTED_OWNER_ID = Saleh\n- REDACTED_GROUP_PERSONAL = Grub pribadi kamu dan saleh\n\nContoh :\nyang mengechat adalah : REDACTED_GROUP_HRD@g.us dan di list ada REDACTED_GROUP_HRD, maka itu adalah HRD, walau dia tidak sama persis.\n\nJika sangat berbeda atau tidak ada didalam list maka tolak dia dengan halus ya, beritahu dia tidak akses dan hanya dapat akses untuk mengobrol.\n\nSekarang fungsi mode ini adalah:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Cek pengirim dan panggil tool yang relevan & kasih tau dari grub apa yang ngirim — LANGSUNG, tanpa teks konfirmasi APAPUN ke User sebelumnya.\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
+            "systemMessage": "=# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n\n- Grup hanya boleh meminta list tugas HRD.\n- Task pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n"
           }
         },
         "type": "@n8n/n8n-nodes-langchain.agent",
@@ -25,7 +25,7 @@
       },
       {
         "parameters": {
-          "modelName": "models/gemini-flash-lite-latest",
+          "modelName": "models/gemini-2.5-flash",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -89,7 +89,7 @@
         "type": "@devlikeapro/n8n-nodes-waha.WAHA",
         "typeVersion": 202502,
         "position": [
-          256,
+          320,
           160
         ],
         "id": "a339207f-62b6-437c-8b72-da5d8fb77361",
@@ -149,78 +149,12 @@
       },
       {
         "parameters": {
-          "conditions": {
-            "options": {
-              "caseSensitive": true,
-              "leftValue": "",
-              "typeValidation": "strict",
-              "version": 3
-            },
-            "conditions": [
-              {
-                "id": "d9422915-c9ea-4eb1-a041-a525cf16b016",
-                "leftValue": "={{ $json.payload.from}}",
-                "rightValue": "g.us",
-                "operator": {
-                  "type": "string",
-                  "operation": "endsWith"
-                }
-              }
-            ],
-            "combinator": "and"
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.if",
-        "typeVersion": 2.3,
-        "position": [
-          -240,
-          144
-        ],
-        "id": "b2d4bab7-590d-41b9-a836-b5c42db3cc6a",
-        "name": "If"
-      },
-      {
-        "parameters": {
-          "conditions": {
-            "options": {
-              "caseSensitive": true,
-              "leftValue": "",
-              "typeValidation": "strict",
-              "version": 3
-            },
-            "conditions": [
-              {
-                "id": "626e85f1-3e23-462b-b7c8-85ff99a7e3c5",
-                "leftValue": "={{ $('WAHA Trigger').item.json.payload.body }}",
-                "rightValue": "@263827644006534",
-                "operator": {
-                  "type": "string",
-                  "operation": "contains"
-                }
-              }
-            ],
-            "combinator": "and"
-          },
-          "options": {}
-        },
-        "type": "n8n-nodes-base.if",
-        "typeVersion": 2.3,
-        "position": [
-          0,
-          0
-        ],
-        "id": "6e7233e8-35e5-4a6b-a4e8-d7cf8ac2846e",
-        "name": "If1"
-      },
-      {
-        "parameters": {
           "amount": "=4"
         },
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          464,
+          496,
           160
         ],
         "id": "b94229d1-aa2f-485e-9ce3-c64248644a8d",
@@ -229,7 +163,7 @@
       },
       {
         "parameters": {
-          "modelName": "models/gemini-flash-lite-latest",
+          "modelName": "models/gemini-2.5-flash",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -252,7 +186,7 @@
           "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan (to-do list), atau menanyakan daftar pekerjaan yang belum selesai.",
           "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
           "options": {
-            "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Tasks dan memilah apakah tugas ini termasuk ke Task Pribadi atau Task HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail tugas -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Penulisan Tugas (Title):\n   Nama Tugas | Deadline (Tugas Siapa)\n   Contoh: Rekap Absensi Karyawan | 18 Juni 2026 (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n   - Hanya berikan list/daftar tugas kepada orang/grup yang berhak. Jika HRD meminta list tugas, maka berikan list khusus HRD saja. Jangan pernah dicampur atau dilebihkan dengan list tugas Pribadi!\n\n- Saleh dan grub khusus kamu dan saleh boleh mengakses semua jadwal\n"
+            "systemMessage": "=# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Tasks dan memilah apakah tugas ini termasuk ke Task Pribadi atau Task HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail tugas -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Penulisan Tugas (Title):\n   Nama Tugas | Deadline (Tugas Siapa)\n   Contoh: Rekap Absensi Karyawan | 18 Juni 2026 (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n  \n- Grup hanya boleh meminta list tugas HRD.\n- Task pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n\n\n"
           }
         },
         "type": "@n8n/n8n-nodes-langchain.agentTool",
@@ -266,7 +200,7 @@
       },
       {
         "parameters": {
-          "modelName": "models/gemini-flash-lite-latest",
+          "modelName": "models/gemini-2.5-flash",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -289,8 +223,8 @@
           "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk membuat jadwal, mengatur waktu rapat, mencatat acara, atau menanyakan agenda di kalender.",
           "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
           "options": {
-            "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n   - Hanya berikan informasi jadwal kepada orang/grup yang berhak. Jika HRD meminta jadwal, berikan jadwal HRD saja. Jangan melebih-lebihkan atau membocorkan jadwal Pribadi ke HRD!\n\n- Saleh dan grub khusus kamu dan saleh boleh mengakses semua jadwal\n",
-            "autoSaveHighlightedData": false
+            "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n\n- Grup hanya boleh meminta list jadwal HRD.\n- Jadwal pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n",
+            "autoSaveHighlightedData": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Auto-save_highlighted_data', ``, 'boolean') }}"
           }
         },
         "type": "@n8n/n8n-nodes-langchain.agentTool",
@@ -701,6 +635,308 @@
             "name": "Google Calendar account"
           }
         }
+      },
+      {
+        "parameters": {
+          "promptType": "=define",
+          "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
+          "options": {
+            "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\"\n\nSelalu gunakan nama lengkap Folin saat menyebut diri sendiri.\n\"Lin\" hanya panggilan dari user, bukan cara kamu memperkenalkan diri.\n\n---\n\n# KONTEKS KAMU\n\nKamu adalah mode percakapan Folin yang melayani pengguna umum —\norang yang belum terdaftar sebagai pengguna resmi.\n\nTugasmu hanya satu: ngobrol dengan baik.\n\n--\n\n# APA YANG BOLEH KAMU LAKUKAN\n\n✓ Menjawab pertanyaan umum dari pengetahuan sendiri\n✓ Obrolan santai, tanya jawab, diskusi topik umum\n✓ Memberikan saran, opini, atau informasi yang sifatnya publik\n✓ Menemani ngobrol dengan hangat dan natural\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh sedikit bahasa gaul sesuai suasana\n- To the point, tidak bertele-tele\n- Jika tidak tahu sesuatu → jujur saja, singkat\n\n---\n\n# FORMAT (WhatsApp)\n\n- Gunakan *bold* untuk hal penting\n- List pakai (–) atau nomor, beri jarak antar poin\n- Paragraf pendek, hindari dinding teks\n- Emoji secukupnya\n- Hindari ##, ---, dan formatting yang tidak didukung WhatsApp\n- Prioritaskan: mudah dibaca dan singkat"
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          1296,
+          -320
+        ],
+        "id": "c35ceb45-fb06-4e8f-8585-ef6cd1a39224",
+        "name": "AI Agent1"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-2.5-flash",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1.1,
+        "position": [
+          1296,
+          -128
+        ],
+        "id": "091a215c-0880-46ab-87d1-a0923f3caf96",
+        "name": "Google Gemini Chat Model3",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "k27SnwImRZKrqF5r",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Send Text",
+          "session": "={{ $('WAHA Trigger').item.json.session }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+          "text": "={{ $('AI Agent1').item.json.output }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          2016,
+          -320
+        ],
+        "id": "e8a7f8b2-018e-472a-8032-8e2b547ec7b8",
+        "name": "Send a text message1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Send Seen",
+          "participant": "",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          640,
+          -320
+        ],
+        "id": "dff0d1ad-6f19-4874-b0d5-0e576679820a",
+        "name": "Send Seen1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Start Typing",
+          "session": "={{ $('WAHA Trigger').item.json.session }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          1056,
+          -320
+        ],
+        "id": "9605a6b1-9057-4359-bd0c-0e93a1e2e5c6",
+        "name": "Start Typing1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Stop Typing",
+          "session": "={{ $('WAHA Trigger').item.json.session }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          1776,
+          -320
+        ],
+        "id": "8bd479b1-c61a-4eaf-9748-c6ade964c972",
+        "name": "Stop Typing1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": "=4"
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          848,
+          -320
+        ],
+        "id": "3c5bb10b-cfff-492e-aa06-2bd4f7b35453",
+        "name": "Wait1",
+        "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "626e85f1-3e23-462b-b7c8-85ff99a7e3c5",
+                "leftValue": "={{ $('WAHA Trigger').item.json.payload.body }}",
+                "rightValue": "@263827644006534",
+                "operator": {
+                  "type": "string",
+                  "operation": "contains"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -192,
+          -48
+        ],
+        "id": "6e7233e8-35e5-4a6b-a4e8-d7cf8ac2846e",
+        "name": "Di tag?"
+      },
+      {
+        "parameters": {
+          "conditions": {
+            "options": {
+              "caseSensitive": true,
+              "leftValue": "",
+              "typeValidation": "strict",
+              "version": 3
+            },
+            "conditions": [
+              {
+                "id": "d9422915-c9ea-4eb1-a041-a525cf16b016",
+                "leftValue": "={{ $json.payload.from}}",
+                "rightValue": "g.us",
+                "operator": {
+                  "type": "string",
+                  "operation": "endsWith"
+                }
+              }
+            ],
+            "combinator": "and"
+          },
+          "options": {}
+        },
+        "type": "n8n-nodes-base.if",
+        "typeVersion": 2.3,
+        "position": [
+          -352,
+          144
+        ],
+        "id": "b2d4bab7-590d-41b9-a836-b5c42db3cc6a",
+        "name": "Grub / Pribadi"
+      },
+      {
+        "parameters": {
+          "rules": {
+            "values": [
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "leftValue": "={{ $('WAHA Trigger').item.json.payload.from }}",
+                      "rightValue": "REDACTED_OWNER_ID@lid",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals"
+                      },
+                      "id": "76b56e05-a4a0-45b4-b93a-c6723fda4069"
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Saleh"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "d75a7a13-63ad-4125-a62f-bd1e5caaff8c",
+                      "leftValue": "={{ $('WAHA Trigger').item.json.payload.from }}",
+                      "rightValue": "REDACTED_GROUP_HRD@g.us",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Grup HRD"
+              },
+              {
+                "conditions": {
+                  "options": {
+                    "caseSensitive": true,
+                    "leftValue": "",
+                    "typeValidation": "strict",
+                    "version": 3
+                  },
+                  "conditions": [
+                    {
+                      "id": "b1e68deb-9dff-42c5-9f89-91d529224595",
+                      "leftValue": "={{ $('WAHA Trigger').item.json.payload.from }}",
+                      "rightValue": "REDACTED_GROUP_PERSONAL@g.us",
+                      "operator": {
+                        "type": "string",
+                        "operation": "equals",
+                        "name": "filter.operator.equals"
+                      }
+                    }
+                  ],
+                  "combinator": "and"
+                },
+                "renameOutput": true,
+                "outputKey": "Grup Pribadi"
+              }
+            ]
+          },
+          "options": {
+            "fallbackOutput": "extra"
+          }
+        },
+        "type": "n8n-nodes-base.switch",
+        "typeVersion": 3.4,
+        "position": [
+          0,
+          160
+        ],
+        "id": "7de437f4-31b3-4dc9-8160-641046ce6094",
+        "name": "Switch"
       }
     ],
     "connections": {
@@ -731,7 +967,7 @@
           [],
           [
             {
-              "node": "If",
+              "node": "Grub / Pribadi",
               "type": "main",
               "index": 0
             }
@@ -765,35 +1001,6 @@
           [
             {
               "node": "Send a text message",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "If": {
-        "main": [
-          [
-            {
-              "node": "If1",
-              "type": "main",
-              "index": 0
-            }
-          ],
-          [
-            {
-              "node": "Send Seen",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "If1": {
-        "main": [
-          [
-            {
-              "node": "Send Seen",
               "type": "main",
               "index": 0
             }
@@ -1030,25 +1237,153 @@
             }
           ]
         ]
+      },
+      "AI Agent1": {
+        "main": [
+          [
+            {
+              "node": "Stop Typing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model3": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send Seen1": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start Typing1": {
+        "main": [
+          [
+            {
+              "node": "AI Agent1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Stop Typing1": {
+        "main": [
+          [
+            {
+              "node": "Send a text message1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Start Typing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Di tag?": {
+        "main": [
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          []
+        ]
+      },
+      "Grub / Pribadi": {
+        "main": [
+          [
+            {
+              "node": "Di tag?",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Switch",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Switch": {
+        "main": [
+          [
+            {
+              "node": "Send Seen",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send Seen",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send Seen",
+              "type": "main",
+              "index": 0
+            }
+          ],
+          [
+            {
+              "node": "Send Seen1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "Menambah siapa saleh, dan list grub yang di izinkan menggunakan tools",
+    "name": "Version be2bad12",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-16T18:04:07.567Z",
-        "id": 53,
+        "createdAt": "2026-06-17T02:52:41.920Z",
+        "id": 77,
         "workflowId": "c517osOLx0Zbnd7M",
-        "versionId": "c9236a95-2222-4824-ab69-e536ee0ab4c3",
+        "versionId": "be2bad12-5d44-40a7-b0fa-88e6ee5cf987",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "c9236a95-2222-4824-ab69-e536ee0ab4c3",
+  "activeVersionId": "be2bad12-5d44-40a7-b0fa-88e6ee5cf987",
   "connections": {
     "AI Agent": {
       "main": [
@@ -1077,7 +1412,7 @@
         [],
         [
           {
-            "node": "If",
+            "node": "Grub / Pribadi",
             "type": "main",
             "index": 0
           }
@@ -1111,35 +1446,6 @@
         [
           {
             "node": "Send a text message",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If": {
-      "main": [
-        [
-          {
-            "node": "If1",
-            "type": "main",
-            "index": 0
-          }
-        ],
-        [
-          {
-            "node": "Send Seen",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "If1": {
-      "main": [
-        [
-          {
-            "node": "Send Seen",
             "type": "main",
             "index": 0
           }
@@ -1377,12 +1683,63 @@
         ]
       ]
     },
-    "AI Agent Tool": {
-      "ai_tool": [
+    "Di tag?": {
+      "main": [
         [
           {
-            "node": "AI Agent",
-            "type": "ai_tool",
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Grub / Pribadi": {
+      "main": [
+        [
+          {
+            "node": "Di tag?",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Send Seen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Seen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Seen",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Seen",
+            "type": "main",
             "index": 0
           }
         ]
@@ -1404,7 +1761,7 @@
         "promptType": "=define",
         "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
         "options": {
-          "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\" \n\n# WAKTU & TANGGAL SAAT INI\nSekarang adalah: {{ $now.setZone('Asia/Jakarta').format('cccc, dd MMMM yyyy - HH:mm') }} WIB.\nGunakan waktu ini sebagai patokan pasti mutlak untuk menghitung \"hari ini\", \"besok\", \"lusa, atau pun tugas yang berhubungan dengan waktu lainnya.\n\nSaat memperkenalkan diri atau menyebut diri sendiri dalam percakapan,\nselalu gunakan nama lengkap Folin. \"Lin\" hanya panggilan dari user,\nbukan cara kamu menyebut dirimu sendiri.\n\n---\n\n# SIAPA YANG DILAYANI\n\nFolin melayani SEMUA orang yang mengajak bicara — bukan hanya Saleh.\n\nBedanya hanya di akses data:\n- User dikenal sebagai Saleh → akses penuh ke semua fitur dan data pribadi\n- User lain / tidak dikenal → tetap bantu untuk pertanyaan umum.\n  Jika membutuhkan data pribadi Saleh (keuangan, tugas, jadwal),\n  minta konfirmasi identitas atau sampaikan bahwa data tersebut privat.\n\n⚠️ Jangan asumsikan setiap user adalah Saleh.\n⚠️ Jangan tolak atau abaikan user yang bukan Saleh — tetap layani.\n\n---\n\n# ATURAN UTAMA: KAPAN BICARA, KAPAN DIAM\n\nIni aturan paling kritis. Ikuti tanpa pengecualian.\n\n## MODE 1 — JAWAB LANGSUNG (tidak ada tool)\nGunakan mode ini untuk:\n- Pertanyaan umum / sehari-hari\n- Obrolan / curhat / salam\n- Pertanyaan yang bisa dijawab dari pengetahuan atau database teks\n\nCara: langsung jawab. Tidak perlu panggil tool apapun.\n\n---\n\n## MODE 2 — PANGGIL TOOL, LALU DIAM TOTAL\nGunakan mode ini untuk SEMUA permintaan yang butuh aksi nyata, Tapi sebelum itu selalu cek ini dari grub mana.\n\nYang mengechat kali ini adalah : {{ $('WAHA Trigger').item.json.payload.from }}\n\nCek list kode grub dibawah ini, Tidak harus sama persis, yang penting jika menganding kode tersebut, maka itu adalah nama grubnya\n\nBerikut list kode grub dan pengguna :\n\n- REDACTED_GROUP_HRD = Grub HRD\n- REDACTED_OWNER_ID = Saleh\n- REDACTED_GROUP_PERSONAL = Grub pribadi kamu dan saleh\n\nContoh :\nyang mengechat adalah : REDACTED_GROUP_HRD@g.us dan di list ada REDACTED_GROUP_HRD, maka itu adalah HRD, walau dia tidak sama persis.\n\nJika sangat berbeda atau tidak ada didalam list maka tolak dia dengan halus ya, beritahu dia tidak akses dan hanya dapat akses untuk mengobrol.\n\nSekarang fungsi mode ini adalah:\n- Tambah / cek / ubah / hapus jadwal atau event di google Calendar\n- Tambah / cek / ubah / hapus tugas atau event di Google Task\n- Catat atau cek keuangan (pemasukan / pengeluaran)\n- Simpan catatan ke database\n- Apapun yang melibatkan tool / AI Agent lain.\n\nCara:\n1. Cek pengirim dan panggil tool yang relevan & kasih tau dari grub apa yang ngirim — LANGSUNG, tanpa teks konfirmasi APAPUN ke User sebelumnya.\n2. Setelah tool selesai — Berikan teks konfirmasi, dan ringkasannya.\n\ncontoh (misalkan sedang ingin menggunakan tool AI Agent Calendar) :\n\n✗ SALAH — jangan lakukan ini:\n\"Oke, aku tambahkan ke Calendar ya!\" → [tool] → \"Berhasil ditambahkan!\"\n\n✓ BENAR — lakukan ini:\n[tool langsung dipanggil] → \"Berhasil ditambahkan!\"\n\n---\n\n## PENGECUALIAN — Boleh bicara meski ada tool, HANYA jika:\n- Informasi tidak lengkap untuk menjalankan tool\n  → Tanya dulu hal yang kurang, singkat dan spesifik\n- Tool gagal / error\n  → Sampaikan error-nya saja, singkat\n\n---\n\n# ATURAN EKSTRAKSI DATA SEBELUM PANGGIL TOOL\n\nSebelum memanggil tool apapun, ekstrak dulu semua field yang dibutuhkan\ndari pesan user. Jangan panggil tool kalau ada field wajib yang kosong.\n\n## Google Calendar — field wajib:\n- summary   : judul event (ambil persis dari yang user sebut)\n- startTime : tanggal + jam mulai\n- endTime   : tanggal + jam selesai (kalau tidak disebut, default +1 jam)\n- description: deskripsi tambahan (boleh kosong)\n\nContoh mapping yang BENAR:\nUser: \"Besok jam 3 sore ada rapat klien\"\n→ summary    = \"Rapat Klien\"\n→ startTime  = [besok] 15:00\n→ endTime    = [besok] 16:00\n→ description= \"\"\n\n✗ SALAH — jangan kirim tool tanpa summary:\n→ summary = \"\" atau summary = null atau summary tidak di-pass sama sekali\n\n✓ BENAR — summary selalu diisi dari kata-kata user:\n→ summary = \"Rapat Klien\" (bukan kosong, bukan \"event\", bukan \"untitled\")\n\nKalau user tidak menyebut nama event sama sekali →\ntanya dulu sebelum panggil tool:\n\"Nama eventnya apa?\"\n\n--\n\n# TANGGUNG JAWAB UTAMA\n\n1. Catat Tugas\n   Simpan, lacak, dan ingatkan soal tugas. Eksekusi via tool ke Google Calendar.\n\n2. Keuangan\n   Catat pemasukan & pengeluaran. Eksekusi via tool ke database keuangan.\n\n3. Planning Harian\n   Susun rencana kerja harian. Kalau sudah disetujui, eksekusi via tool ke Google Calendar.\n\n4. Catatan Umum\n   Catat hal yang perlu diingat. Eksekusi via tool ke database catatan.\n\n5. Tanya Jawab (MODE 1 — jawab langsung)\n   Urutan prioritas:\n   → Database Saleh (cek dulu)\n   → Internet\n   → Pengetahuan sendiri\n   → Kalau semua tidak ada → jawab tidak tahu, sopan dan singkat\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh campur sedikit bahasa gaul kalau suasananya santai\n- To the point — tidak bertele-tele\n- Kalau jadwal atau keuangan terlihat kacau → kasih tahu dengan tegas tapi sopan\n  Contoh: \"Eh, pengeluaran minggu ini udah 3x lipat dari biasanya loh.\"\n\n---\n\n# FORMAT (WhatsApp)\n(Berlaku hanya saat MODE 1 — saat berbicara)\n\n- Gunakan *bold* untuk hal penting\n- List pendek pakai tanda (–) atau nomor. Setiap poin pada list diberikan jarak diantaranya menggunakan line spacing.\n- Paragraf pendek, hindari dinding teks\n- Emoji boleh, tapi secukupnya\n- Respons panjang sedikit tidak apa, yang penting mudah untuk di baca oleh user pengguna WhatsApp.\n- Pokoknya Prioritaskan mudah dibaca dan juga singkat.\n- Hindari formatting yang tidak didukung WhatsApp (##, ---, dsb)"
+          "systemMessage": "=# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n\n- Grup hanya boleh meminta list tugas HRD.\n- Task pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
@@ -1418,7 +1775,7 @@
     },
     {
       "parameters": {
-        "modelName": "models/gemini-flash-lite-latest",
+        "modelName": "models/gemini-2.5-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -1482,7 +1839,7 @@
       "type": "@devlikeapro/n8n-nodes-waha.WAHA",
       "typeVersion": 202502,
       "position": [
-        256,
+        480,
         160
       ],
       "id": "a339207f-62b6-437c-8b72-da5d8fb77361",
@@ -1505,7 +1862,7 @@
       "type": "@devlikeapro/n8n-nodes-waha.WAHA",
       "typeVersion": 202502,
       "position": [
-        672,
+        768,
         160
       ],
       "id": "98aebe63-bb30-4481-8d57-d5db1d82f665",
@@ -1542,78 +1899,12 @@
     },
     {
       "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "d9422915-c9ea-4eb1-a041-a525cf16b016",
-              "leftValue": "={{ $json.payload.from}}",
-              "rightValue": "g.us",
-              "operator": {
-                "type": "string",
-                "operation": "endsWith"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        -240,
-        144
-      ],
-      "id": "b2d4bab7-590d-41b9-a836-b5c42db3cc6a",
-      "name": "If"
-    },
-    {
-      "parameters": {
-        "conditions": {
-          "options": {
-            "caseSensitive": true,
-            "leftValue": "",
-            "typeValidation": "strict",
-            "version": 3
-          },
-          "conditions": [
-            {
-              "id": "626e85f1-3e23-462b-b7c8-85ff99a7e3c5",
-              "leftValue": "={{ $('WAHA Trigger').item.json.payload.body }}",
-              "rightValue": "@263827644006534",
-              "operator": {
-                "type": "string",
-                "operation": "contains"
-              }
-            }
-          ],
-          "combinator": "and"
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.if",
-      "typeVersion": 2.3,
-      "position": [
-        0,
-        0
-      ],
-      "id": "6e7233e8-35e5-4a6b-a4e8-d7cf8ac2846e",
-      "name": "If1"
-    },
-    {
-      "parameters": {
         "amount": "=4"
       },
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        464,
+        624,
         160
       ],
       "id": "b94229d1-aa2f-485e-9ce3-c64248644a8d",
@@ -1622,7 +1913,7 @@
     },
     {
       "parameters": {
-        "modelName": "models/gemini-flash-lite-latest",
+        "modelName": "models/gemini-2.5-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -1645,7 +1936,7 @@
         "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan (to-do list), atau menanyakan daftar pekerjaan yang belum selesai.",
         "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
         "options": {
-          "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Tasks dan memilah apakah tugas ini termasuk ke Task Pribadi atau Task HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail tugas -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Penulisan Tugas (Title):\n   Nama Tugas | Deadline (Tugas Siapa)\n   Contoh: Rekap Absensi Karyawan | 18 Juni 2026 (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n   - Hanya berikan list/daftar tugas kepada orang/grup yang berhak. Jika HRD meminta list tugas, maka berikan list khusus HRD saja. Jangan pernah dicampur atau dilebihkan dengan list tugas Pribadi!\n\n- Saleh dan grub khusus kamu dan saleh boleh mengakses semua jadwal\n"
+          "systemMessage": "=# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Tasks dan memilah apakah tugas ini termasuk ke Task Pribadi atau Task HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail tugas -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Penulisan Tugas (Title):\n   Nama Tugas | Deadline (Tugas Siapa)\n   Contoh: Rekap Absensi Karyawan | 18 Juni 2026 (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n  \n- Grup hanya boleh meminta list tugas HRD.\n- Task pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n\n\n"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agentTool",
@@ -1659,7 +1950,7 @@
     },
     {
       "parameters": {
-        "modelName": "models/gemini-flash-lite-latest",
+        "modelName": "models/gemini-2.5-flash",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
@@ -1682,8 +1973,8 @@
         "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk membuat jadwal, mengatur waktu rapat, mencatat acara, atau menanyakan agenda di kalender.",
         "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
         "options": {
-          "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n   - Hanya berikan informasi jadwal kepada orang/grup yang berhak. Jika HRD meminta jadwal, berikan jadwal HRD saja. Jangan melebih-lebihkan atau membocorkan jadwal Pribadi ke HRD!\n\n- Saleh dan grub khusus kamu dan saleh boleh mengakses semua jadwal\n",
-          "autoSaveHighlightedData": false
+          "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n\n- Grup hanya boleh meminta list jadwal HRD.\n- Jadwal pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n",
+          "autoSaveHighlightedData": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Auto-save_highlighted_data', ``, 'boolean') }}"
         }
       },
       "type": "@n8n/n8n-nodes-langchain.agentTool",
@@ -2097,17 +2388,185 @@
     },
     {
       "parameters": {
-        "toolDescription": "Gunakan tool ini untuk mengambil data dari ",
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "626e85f1-3e23-462b-b7c8-85ff99a7e3c5",
+              "leftValue": "={{ $('WAHA Trigger').item.json.payload.body }}",
+              "rightValue": "@263827644006534",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.agentTool",
-      "typeVersion": 3,
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
       "position": [
-        1072,
-        368
+        -192,
+        -48
       ],
-      "id": "d878d70b-0fab-444e-9ded-26a66ce98c5c",
-      "name": "AI Agent Tool"
+      "id": "6e7233e8-35e5-4a6b-a4e8-d7cf8ac2846e",
+      "name": "Di tag?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "d9422915-c9ea-4eb1-a041-a525cf16b016",
+              "leftValue": "={{ $json.payload.from}}",
+              "rightValue": "g.us",
+              "operator": {
+                "type": "string",
+                "operation": "endsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -352,
+        144
+      ],
+      "id": "b2d4bab7-590d-41b9-a836-b5c42db3cc6a",
+      "name": "Grub / Pribadi"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('WAHA Trigger').item.json.payload.from }}",
+                    "rightValue": "REDACTED_OWNER_ID@lid",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "76b56e05-a4a0-45b4-b93a-c6723fda4069"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "=Saleh"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d75a7a13-63ad-4125-a62f-bd1e5caaff8c",
+                    "leftValue": "={{ $('WAHA Trigger').item.json.payload.from }}",
+                    "rightValue": "REDACTED_GROUP_HRD@g.us",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Grup HRD"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "b1e68deb-9dff-42c5-9f89-91d529224595",
+                    "leftValue": "={{ $('WAHA Trigger').item.json.payload.from }}",
+                    "rightValue": "REDACTED_GROUP_PERSONAL@g.us",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Grup Pribadi"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        160
+      ],
+      "id": "7de437f4-31b3-4dc9-8160-641046ce6094",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "bea4c17a-d419-4b94-80df-1ef591d526fb",
+              "name": "",
+              "value": "",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        48
+      ],
+      "id": "38f3a508-0c32-4164-af40-543525e3c8a9",
+      "name": "Edit Fields"
     }
   ],
   "pinData": {},
@@ -2143,7 +2602,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-16T18:11:55.137Z",
-  "versionCounter": 759,
-  "versionId": "24444c1a-6a00-4a4f-a158-6e7437543885"
+  "updatedAt": "2026-06-17T08:18:21.523Z",
+  "versionCounter": 951,
+  "versionId": "4e8a4f9e-2bb9-4def-8253-e7e6c864be85"
 }
