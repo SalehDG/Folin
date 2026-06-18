@@ -1,52 +1,21 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-16T11:28:52.000Z",
-    "createdAt": "2026-06-16T11:28:27.797Z",
-    "versionId": "2a883767-69d0-407e-b27a-e88770b1a248",
+    "updatedAt": "2026-06-18T16:21:34.000Z",
+    "createdAt": "2026-06-18T16:21:06.801Z",
+    "versionId": "4afff927-96ae-4095-a7b9-d9ef9a4a9595",
     "workflowId": "mI164p98uNwNZNWC",
     "nodes": [
       {
         "parameters": {
-          "workflowInputs": {
-            "values": [
-              {
-                "name": "task_description"
-              }
-            ]
-          }
-        },
-        "type": "n8n-nodes-base.executeWorkflowTrigger",
-        "typeVersion": 1.2,
-        "position": [
-          0,
-          0
-        ],
-        "id": "12d96ffd-66f6-4fc0-a56d-0f3210f369a6",
-        "name": "When Executed by Another Workflow"
-      },
-      {
-        "parameters": {
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.agent",
-        "typeVersion": 3.1,
-        "position": [
-          208,
-          0
-        ],
-        "id": "8761ded3-bd58-49b9-8b91-29495703de1d",
-        "name": "AI Agent"
-      },
-      {
-        "parameters": {
+          "modelName": "models/gemini-flash-lite-latest",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1.1,
         "position": [
-          80,
-          208
+          288,
+          80
         ],
         "id": "5c9752e9-58ed-4fa0-9f92-be39a70c5ce2",
         "name": "Google Gemini Chat Model",
@@ -59,55 +28,585 @@
       },
       {
         "parameters": {
-          "task": "={{ $json.task_title }}",
-          "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
+          "resource": "Chatting",
+          "operation": "Start Typing",
+          "session": "=default",
+          "chatId": "=REDACTED_OWNER_ID@lid",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          640,
+          -96
+        ],
+        "id": "a8c2503a-813b-46ba-89e6-ebd1b4254331",
+        "name": "Start Typing",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          848,
+          -96
+        ],
+        "id": "1526f7b1-17d5-40de-a1d2-30c8a5f816f7",
+        "name": "Wait",
+        "webhookId": "88540478-a6f8-4e91-bc15-76028fb14ca9"
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Send Text",
+          "session": "=default",
+          "chatId": "=REDACTED_OWNER_ID@lid",
+          "reply_to": "REDACTED_OWNER_ID@lid",
+          "text": "={{ $('AI Agent Saleh').item.json.output }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          1264,
+          -96
+        ],
+        "id": "08030bd8-c718-4419-ad34-320e9addae38",
+        "name": "Send a text message",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Stop Typing",
+          "session": "=default",
+          "chatId": "=REDACTED_OWNER_ID@lid",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          1056,
+          -96
+        ],
+        "id": "a79759ea-b6d3-410f-9649-5c9233d4193d",
+        "name": "Stop Typing",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "task": "MTA4NTQ2NjcyNzIxMjYzMDM1Mzg6MDow",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
           "additionalFields": {}
         },
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          368,
-          208
+          432,
+          176
         ],
         "id": "59f52abb-df43-49e8-85d5-9762af84216a",
-        "name": "Create a task in Google Tasks",
+        "name": "Get many tasks from personal",
         "credentials": {
           "googleTasksOAuth2Api": {
             "id": "6bTNNBL6dQ5T8XQE",
             "name": "Google Tasks account"
           }
         }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "calendar": {
+            "__rl": true,
+            "value": "REDACTED_EMAIL@example.com",
+            "mode": "list",
+            "cachedResultName": "REDACTED_EMAIL@example.com"
+          },
+          "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+          "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+          "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          592,
+          176
+        ],
+        "id": "d8361a8b-87aa-4d60-b720-07f98bb8c594",
+        "name": "Get many events from personal",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "calendar": {
+            "__rl": true,
+            "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+            "mode": "list",
+            "cachedResultName": "HRD"
+          },
+          "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+          "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+          "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          624,
+          -320
+        ],
+        "id": "e7764ef2-406d-4795-bca6-3345474678ca",
+        "name": "Get many events from HRD",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "task": "dDdWRzg5UHVjdWljcHBIdQ",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.googleTasksTool",
+        "typeVersion": 1,
+        "position": [
+          464,
+          -320
+        ],
+        "id": "20da82c2-3e0c-4328-a1d3-043c42f4e03b",
+        "name": "Get many tasks from HRD",
+        "credentials": {
+          "googleTasksOAuth2Api": {
+            "id": "6bTNNBL6dQ5T8XQE",
+            "name": "Google Tasks account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-flash-lite-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1.1,
+        "position": [
+          288,
+          -320
+        ],
+        "id": "481eccd5-cd22-41b7-bdcc-93e1714ee3f3",
+        "name": "Google Gemini Chat Model1",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "k27SnwImRZKrqF5r",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "rule": {
+            "interval": [
+              {
+                "triggerAtHour": 9
+              }
+            ]
+          }
+        },
+        "type": "n8n-nodes-base.scheduleTrigger",
+        "typeVersion": 1.3,
+        "position": [
+          -16,
+          -320
+        ],
+        "id": "3e485f7e-6ca9-4335-9349-56a7963ed761",
+        "name": "Schedule Trigger1"
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Start Typing",
+          "session": "=default",
+          "chatId": "=REDACTED_GROUP_HRD@g.us",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          640,
+          -544
+        ],
+        "id": "c0749e1f-e85d-4ba2-8292-1c6575af881a",
+        "name": "Start Typing1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": 3
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          848,
+          -544
+        ],
+        "id": "42ee2f6e-f6a2-427d-bb5e-3475d6153deb",
+        "name": "Wait1",
+        "webhookId": "88540478-a6f8-4e91-bc15-76028fb14ca9"
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Send Text",
+          "session": "=default",
+          "chatId": "=REDACTED_GROUP_HRD@g.us",
+          "reply_to": "REDACTED_GROUP_HRD@g.us",
+          "text": "={{ $('AI Agent HRD').item.json.output }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          1264,
+          -544
+        ],
+        "id": "1257205f-376a-47dd-a18c-434d01b05d9e",
+        "name": "Send a text message1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Stop Typing",
+          "session": "=default",
+          "chatId": "=REDACTED_GROUP_HRD@g.us",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          1056,
+          -544
+        ],
+        "id": "b46f3652-1388-42c6-b3d2-2fa254dde2ba",
+        "name": "Stop Typing1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "calendar": {
+            "__rl": true,
+            "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+            "mode": "list",
+            "cachedResultName": "HRD"
+          },
+          "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+          "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+          "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+          "options": {}
+        },
+        "type": "n8n-nodes-base.googleCalendarTool",
+        "typeVersion": 1.3,
+        "position": [
+          592,
+          400
+        ],
+        "id": "06a49be8-4d34-44f4-abb3-cc93baf2261a",
+        "name": "Get many events from HRD1",
+        "credentials": {
+          "googleCalendarOAuth2Api": {
+            "id": "8U792wK9xBpopW0K",
+            "name": "Google Calendar account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "operation": "getAll",
+          "task": "dDdWRzg5UHVjdWljcHBIdQ",
+          "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+          "additionalFields": {}
+        },
+        "type": "n8n-nodes-base.googleTasksTool",
+        "typeVersion": 1,
+        "position": [
+          432,
+          400
+        ],
+        "id": "2123fad8-9bce-4d21-a5c9-8812692bc869",
+        "name": "Get many tasks from HRD1",
+        "credentials": {
+          "googleTasksOAuth2Api": {
+            "id": "6bTNNBL6dQ5T8XQE",
+            "name": "Google Tasks account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Role: You are \"Folin\" (called \"Lin\"). Provide the automated daily morning briefing for Saleh.\nTime: {{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\nIMMEDIATE TASK (AUTO-EXECUTE):\nWithout asking for permission, IMMEDIATELY use all tools to fetch events and tasks. \nCRITICAL FILTER: You MUST manually check the dates of the fetched items. IGNORE and DELETE any items from your mind that are NOT scheduled for today. ONLY show today's items.\n\nBehavior & Greeting:\n- Always Start the message with a short, warm, personal greeting to Saleh (e.g., \"Selamat pagi Kak Saleh! ✨ Ini rangkuman tugas dan jadwal hari ini!\").\n- Keep the tone casual, friendly, and energetic.\n- add today date\n\nEmpty State (NO TASKS & NO EVENTS):\n- If there are absolutely NO tasks and NO events scheduled for today, reply the user greeting first and then  congrats for nothing to do today (e.g. Hore!, selamat hari ini kamu bebas tugas 🎉)\n\nOutput Format (WhatsApp-Optimized):\n- ALWAYS reply in casual Indonesian.\n- Group and separate the items clearly by scope (e.g., \"Tugas Pribadi\" vs \"Tugas HRD\").\n- Prefer short paragraphs. No text walls.\n- Use *single asterisks* for *bold* text.\n- CRITICAL SPACING: You MUST add a BLANK LINE between EVERY SINGLE numbered task or event. Never stack them.\n- AVOID unsupported markdown (NO ##, ---, or **).",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          288,
+          -96
+        ],
+        "id": "543e9bb5-c88a-4a71-b424-3102ac1adb0c",
+        "name": "AI Agent Saleh"
+      },
+      {
+        "parameters": {
+          "promptType": "define",
+          "text": "=Role: You are \"Folin\" (called \"Lin\"). Provide the automated daily morning briefing for the HRD Team.\nTime: {{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\nIMMEDIATE TASK (AUTO-EXECUTE):\nWithout asking for permission, IMMEDIATELY use all tools to fetch events and tasks. \nCRITICAL FILTER: You MUST manually check the dates of the fetched items. IGNORE and DELETE any items from your mind that are NOT scheduled for today. ONLY show today's items.\n\nBehavior & Greeting:\n- Start the message with a short, professional yet warm group greeting (e.g., \"Halo rekan-rekan HRD! ☀️ Tetap semangat ya, ini daftar tugas dan agenda tim kita untuk hari ini!\").\n- Keep the tone energetic, helpful, and clear.\n- add today date\n\nEmpty State (NO HRD TASKS & NO HRD EVENTS):\n- After filtering for HRD scopes, if there are NO HRD tasks and NO HRD events for today, you replay the HRD team with greeting first and then congrats (e.g. Hore!, selamat kalian bebas tugas hari ini 🎉)\n\nOutput Format (WhatsApp-Optimized):\n- \n- ALWAYS reply in casual Indonesian.\n- STRICTLY ONLY display HRD items. NEVER show, mention, or expose any Personal data to this group.\n- Group and separate the items clearly (e.g., \"Jadwal HRD\" vs \"Tugas HRD\").\n- Prefer short paragraphs. No text walls.\n- Use *single asterisks* for *bold* text.\n- CRITICAL SPACING: You MUST add a BLANK LINE (double enter) between EVERY SINGLE numbered task or event. Never stack them.\n- AVOID unsupported markdown (NO ##, ---, or **).",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          288,
+          -544
+        ],
+        "id": "f35af4cc-58c2-4820-ba7e-566258efda88",
+        "name": "AI Agent HRD"
       }
     ],
     "connections": {
-      "When Executed by Another Workflow": {
-        "main": [
-          [
-            {
-              "node": "AI Agent",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Google Gemini Chat Model": {
         "ai_languageModel": [
           [
             {
-              "node": "AI Agent",
+              "node": "AI Agent Saleh",
               "type": "ai_languageModel",
               "index": 0
             }
           ]
         ]
       },
-      "Create a task in Google Tasks": {
+      "Start Typing": {
+        "main": [
+          [
+            {
+              "node": "Wait",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait": {
+        "main": [
+          [
+            {
+              "node": "Stop Typing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Stop Typing": {
+        "main": [
+          [
+            {
+              "node": "Send a text message",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many tasks from personal": {
         "ai_tool": [
           [
             {
-              "node": "AI Agent",
+              "node": "AI Agent Saleh",
               "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many events from personal": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Saleh",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many events from HRD": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent HRD",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many tasks from HRD": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent HRD",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Google Gemini Chat Model1": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent HRD",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Schedule Trigger1": {
+        "main": [
+          [
+            {
+              "node": "AI Agent HRD",
+              "type": "main",
+              "index": 0
+            },
+            {
+              "node": "AI Agent Saleh",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start Typing1": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Stop Typing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Stop Typing1": {
+        "main": [
+          [
+            {
+              "node": "Send a text message1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many tasks from HRD1": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Saleh",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Get many events from HRD1": {
+        "ai_tool": [
+          [
+            {
+              "node": "AI Agent Saleh",
+              "type": "ai_tool",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent Saleh": {
+        "main": [
+          [
+            {
+              "node": "Start Typing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent HRD": {
+        "main": [
+          [
+            {
+              "node": "Start Typing1",
+              "type": "main",
               "index": 0
             }
           ]
@@ -116,92 +615,208 @@
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "tes1",
+    "name": "Version 4afff927",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-16T11:28:52.307Z",
-        "id": 37,
+        "createdAt": "2026-06-18T16:21:34.237Z",
+        "id": 99,
         "workflowId": "mI164p98uNwNZNWC",
-        "versionId": "2a883767-69d0-407e-b27a-e88770b1a248",
+        "versionId": "4afff927-96ae-4095-a7b9-d9ef9a4a9595",
         "event": "activated",
-        "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
-      },
-      {
-        "createdAt": "2026-06-16T17:24:17.799Z",
-        "id": 51,
-        "workflowId": "mI164p98uNwNZNWC",
-        "versionId": "2a883767-69d0-407e-b27a-e88770b1a248",
-        "event": "activated",
-        "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
-      },
-      {
-        "createdAt": "2026-06-16T17:24:17.773Z",
-        "id": 50,
-        "workflowId": "mI164p98uNwNZNWC",
-        "versionId": "2a883767-69d0-407e-b27a-e88770b1a248",
-        "event": "deactivated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "2a883767-69d0-407e-b27a-e88770b1a248",
+  "activeVersionId": "4afff927-96ae-4095-a7b9-d9ef9a4a9595",
   "connections": {
     "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent",
+            "node": "AI Agent Saleh",
             "type": "ai_languageModel",
             "index": 0
           }
         ]
       ]
     },
-    "Schedule Trigger": {
+    "Start Typing": {
       "main": [
         [
           {
-            "node": "AI Agent",
+            "node": "Wait",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Get many events in Google Calendar": {
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Stop Typing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stop Typing": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many tasks from personal": {
       "ai_tool": [
         [
           {
-            "node": "AI Agent",
+            "node": "AI Agent Saleh",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "Get many tasks in Google Tasks": {
+    "Get many events from personal": {
       "ai_tool": [
         [
           {
-            "node": "AI Agent",
+            "node": "AI Agent Saleh",
             "type": "ai_tool",
             "index": 0
           }
         ]
       ]
     },
-    "AI Agent": {
+    "Get many events from HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent HRD",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many tasks from HRD": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent HRD",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent HRD",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent HRD",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent Saleh",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Typing1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Stop Typing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stop Typing1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many tasks from HRD1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Saleh",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many events from HRD1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent Saleh",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Saleh": {
       "main": [
         [
           {
             "node": "Start Typing",
             "type": "main",
             "index": 0
-          },
+          }
+        ]
+      ]
+    },
+    "AI Agent HRD": {
+      "main": [
+        [
           {
-            "node": "Basic LLM Chain",
+            "node": "Start Typing1",
             "type": "main",
             "index": 0
           }
@@ -221,16 +836,224 @@
   "nodes": [
     {
       "parameters": {
+        "modelName": "models/gemini-flash-lite-latest",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        208,
-        176
+        288,
+        80
       ],
       "id": "5c9752e9-58ed-4fa0-9f92-be39a70c5ce2",
       "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "k27SnwImRZKrqF5r",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Start Typing",
+        "session": "=default",
+        "chatId": "=REDACTED_OWNER_ID@lid",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        640,
+        -96
+      ],
+      "id": "a8c2503a-813b-46ba-89e6-ebd1b4254331",
+      "name": "Start Typing",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        -96
+      ],
+      "id": "1526f7b1-17d5-40de-a1d2-30c8a5f816f7",
+      "name": "Wait",
+      "webhookId": "88540478-a6f8-4e91-bc15-76028fb14ca9"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Text",
+        "session": "=default",
+        "chatId": "=REDACTED_OWNER_ID@lid",
+        "reply_to": "REDACTED_OWNER_ID@lid",
+        "text": "={{ $('AI Agent Saleh').item.json.output }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1264,
+        -96
+      ],
+      "id": "08030bd8-c718-4419-ad34-320e9addae38",
+      "name": "Send a text message",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Stop Typing",
+        "session": "=default",
+        "chatId": "=REDACTED_OWNER_ID@lid",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1056,
+        -96
+      ],
+      "id": "a79759ea-b6d3-410f-9649-5c9233d4193d",
+      "name": "Stop Typing",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "task": "MTA4NTQ2NjcyNzIxMjYzMDM1Mzg6MDow",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        432,
+        176
+      ],
+      "id": "59f52abb-df43-49e8-85d5-9762af84216a",
+      "name": "Get many tasks from personal",
+      "credentials": {
+        "googleTasksOAuth2Api": {
+          "id": "6bTNNBL6dQ5T8XQE",
+          "name": "Google Tasks account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "REDACTED_EMAIL@example.com",
+          "mode": "list",
+          "cachedResultName": "REDACTED_EMAIL@example.com"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        592,
+        176
+      ],
+      "id": "d8361a8b-87aa-4d60-b720-07f98bb8c594",
+      "name": "Get many events from personal",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "490172bd9753c288167757286402d502e4172febb4da49f9a85725833afab235@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "HRD"
+        },
+        "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}",
+        "timeMin": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('After', ``, 'string') }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Before', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        -320
+      ],
+      "id": "e7764ef2-406d-4795-bca6-3345474678ca",
+      "name": "Get many events from HRD",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "8U792wK9xBpopW0K",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "task": "dDdWRzg5UHVjdWljcHBIdQ",
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
+      "position": [
+        464,
+        -320
+      ],
+      "id": "20da82c2-3e0c-4328-a1d3-043c42f4e03b",
+      "name": "Get many tasks from HRD",
+      "credentials": {
+        "googleTasksOAuth2Api": {
+          "id": "6bTNNBL6dQ5T8XQE",
+          "name": "Google Tasks account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-flash-lite-latest",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
+      "position": [
+        288,
+        -320
+      ],
+      "id": "481eccd5-cd22-41b7-bdcc-93e1714ee3f3",
+      "name": "Google Gemini Chat Model1",
       "credentials": {
         "googlePalmApi": {
           "id": "k27SnwImRZKrqF5r",
@@ -251,11 +1074,96 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "typeVersion": 1.3,
       "position": [
-        0,
-        0
+        -16,
+        -320
       ],
-      "id": "c3fafddd-d4fc-413c-b477-025e97c374f7",
-      "name": "Schedule Trigger"
+      "id": "3e485f7e-6ca9-4335-9349-56a7963ed761",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Start Typing",
+        "session": "=default",
+        "chatId": "=REDACTED_GROUP_HRD@g.us",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        640,
+        -544
+      ],
+      "id": "c0749e1f-e85d-4ba2-8292-1c6575af881a",
+      "name": "Start Typing1",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 3
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        848,
+        -544
+      ],
+      "id": "42ee2f6e-f6a2-427d-bb5e-3475d6153deb",
+      "name": "Wait1",
+      "webhookId": "88540478-a6f8-4e91-bc15-76028fb14ca9"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Text",
+        "session": "=default",
+        "chatId": "=REDACTED_GROUP_HRD@g.us",
+        "reply_to": "REDACTED_GROUP_HRD@g.us",
+        "text": "={{ $('AI Agent HRD').item.json.output }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1264,
+        -544
+      ],
+      "id": "1257205f-376a-47dd-a18c-434d01b05d9e",
+      "name": "Send a text message1",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Stop Typing",
+        "session": "=default",
+        "chatId": "=REDACTED_GROUP_HRD@g.us",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        1056,
+        -544
+      ],
+      "id": "b46f3652-1388-42c6-b3d2-2fa254dde2ba",
+      "name": "Stop Typing1",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
     },
     {
       "parameters": {
@@ -274,11 +1182,11 @@
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
       "position": [
-        528,
-        208
+        592,
+        400
       ],
-      "id": "d8361a8b-87aa-4d60-b720-07f98bb8c594",
-      "name": "Get many events in Google Calendar",
+      "id": "06a49be8-4d34-44f4-abb3-cc93baf2261a",
+      "name": "Get many events from HRD1",
       "credentials": {
         "googleCalendarOAuth2Api": {
           "id": "8U792wK9xBpopW0K",
@@ -289,18 +1197,18 @@
     {
       "parameters": {
         "operation": "getAll",
-        "task": null,
+        "task": "dDdWRzg5UHVjdWljcHBIdQ",
         "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
         "additionalFields": {}
       },
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        368,
-        208
+        432,
+        400
       ],
-      "id": "59f52abb-df43-49e8-85d5-9762af84216a",
-      "name": "Get many tasks in Google Tasks",
+      "id": "2123fad8-9bce-4d21-a5c9-8812692bc869",
+      "name": "Get many tasks from HRD1",
       "credentials": {
         "googleTasksOAuth2Api": {
           "id": "6bTNNBL6dQ5T8XQE",
@@ -310,50 +1218,33 @@
     },
     {
       "parameters": {
-        "resource": "Chatting",
-        "operation": "Start Typing",
-        "requestOptions": {}
-      },
-      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
-      "typeVersion": 202502,
-      "position": [
-        560,
-        0
-      ],
-      "id": "a8c2503a-813b-46ba-89e6-ebd1b4254331",
-      "name": "Start Typing",
-      "credentials": {
-        "wahaApi": {
-          "id": "WwLPlwPMLibeRJai",
-          "name": "WAHA account"
-        }
-      }
-    },
-    {
-      "parameters": {
+        "promptType": "define",
+        "text": "=Role: You are \"Folin\" (called \"Lin\"). Provide the automated daily morning briefing for Saleh.\nTime: {{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\nIMMEDIATE TASK (AUTO-EXECUTE):\nWithout asking for permission, IMMEDIATELY use all tools to fetch events and tasks. \nCRITICAL FILTER: You MUST manually check the dates of the fetched items. IGNORE and DELETE any items from your mind that are NOT scheduled for today. ONLY show today's items.\n\nBehavior & Greeting:\n- Always Start the message with a short, warm, personal greeting to Saleh (e.g., \"Selamat pagi Kak Saleh! ✨ Ini rangkuman tugas dan jadwal hari ini!\").\n- Keep the tone casual, friendly, and energetic.\n- add today date\n\nEmpty State (NO TASKS & NO EVENTS):\n- If there are absolutely NO tasks and NO events scheduled for today, reply the user greeting first and then  congrats for nothing to do today (e.g. Hore!, selamat hari ini kamu bebas tugas 🎉)\n\nOutput Format (WhatsApp-Optimized):\n- ALWAYS reply in casual Indonesian.\n- Group and separate the items clearly by scope (e.g., \"Tugas Pribadi\" vs \"Tugas HRD\").\n- Prefer short paragraphs. No text walls.\n- Use *single asterisks* for *bold* text.\n- CRITICAL SPACING: You MUST add a BLANK LINE between EVERY SINGLE numbered task or event. Never stack them.\n- AVOID unsupported markdown (NO ##, ---, or **).",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        208,
-        0
+        288,
+        -96
       ],
-      "id": "8761ded3-bd58-49b9-8b91-29495703de1d",
-      "name": "AI Agent"
+      "id": "543e9bb5-c88a-4a71-b424-3102ac1adb0c",
+      "name": "AI Agent Saleh"
     },
     {
       "parameters": {
-        "batching": {}
+        "promptType": "define",
+        "text": "=Role: You are \"Folin\" (called \"Lin\"). Provide the automated daily morning briefing for the HRD Team.\nTime: {{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\nIMMEDIATE TASK (AUTO-EXECUTE):\nWithout asking for permission, IMMEDIATELY use all tools to fetch events and tasks. \nCRITICAL FILTER: You MUST manually check the dates of the fetched items. IGNORE and DELETE any items from your mind that are NOT scheduled for today. ONLY show today's items.\n\nBehavior & Greeting:\n- Start the message with a short, professional yet warm group greeting (e.g., \"Halo rekan-rekan HRD! ☀️ Tetap semangat ya, ini daftar tugas dan agenda tim kita untuk hari ini!\").\n- Keep the tone energetic, helpful, and clear.\n- add today date\n\nEmpty State (NO HRD TASKS & NO HRD EVENTS):\n- After filtering for HRD scopes, if there are NO HRD tasks and NO HRD events for today, you replay the HRD team with greeting first and then congrats (e.g. Hore!, selamat kalian bebas tugas hari ini 🎉)\n\nOutput Format (WhatsApp-Optimized):\n- \n- ALWAYS reply in casual Indonesian.\n- STRICTLY ONLY display HRD items. NEVER show, mention, or expose any Personal data to this group.\n- Group and separate the items clearly (e.g., \"Jadwal HRD\" vs \"Tugas HRD\").\n- Prefer short paragraphs. No text walls.\n- Use *single asterisks* for *bold* text.\n- CRITICAL SPACING: You MUST add a BLANK LINE (double enter) between EVERY SINGLE numbered task or event. Never stack them.\n- AVOID unsupported markdown (NO ##, ---, or **).",
+        "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.chainLlm",
-      "typeVersion": 1.9,
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
       "position": [
-        704,
-        144
+        288,
+        -544
       ],
-      "id": "11dee4e1-f605-4367-bde8-150a815c1854",
-      "name": "Basic LLM Chain"
+      "id": "f35af4cc-58c2-4820-ba7e-566258efda88",
+      "name": "AI Agent HRD"
     }
   ],
   "pinData": {},
@@ -386,10 +1277,14 @@
     }
   ],
   "sourceWorkflowId": null,
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger1": {
+      "recurrenceRules": []
+    }
+  },
   "tags": [],
-  "triggerCount": 0,
-  "updatedAt": "2026-06-18T11:51:54.314Z",
-  "versionCounter": 116,
-  "versionId": "df013e50-a97d-4513-a0d0-38e3f78f9422"
+  "triggerCount": 1,
+  "updatedAt": "2026-06-18T16:21:06.798Z",
+  "versionCounter": 300,
+  "versionId": "4afff927-96ae-4095-a7b9-d9ef9a4a9595"
 }
