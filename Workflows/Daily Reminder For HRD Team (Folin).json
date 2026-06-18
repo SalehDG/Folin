@@ -159,17 +159,6 @@
         ]
       ]
     },
-    "Create a task in Google Tasks": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Schedule Trigger": {
       "main": [
         [
@@ -191,6 +180,33 @@
           }
         ]
       ]
+    },
+    "Get many tasks in Google Tasks": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Start Typing",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Basic LLM Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "createdAt": "2026-06-14T17:03:08.078Z",
@@ -207,24 +223,11 @@
       "parameters": {
         "options": {}
       },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3.1,
-      "position": [
-        208,
-        0
-      ],
-      "id": "8761ded3-bd58-49b9-8b91-29495703de1d",
-      "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "options": {}
-      },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        80,
-        208
+        208,
+        176
       ],
       "id": "5c9752e9-58ed-4fa0-9f92-be39a70c5ce2",
       "name": "Google Gemini Chat Model",
@@ -232,27 +235,6 @@
         "googlePalmApi": {
           "id": "k27SnwImRZKrqF5r",
           "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "task": "={{ $json.task_title }}",
-        "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Title', ``, 'string') }}",
-        "additionalFields": {}
-      },
-      "type": "n8n-nodes-base.googleTasksTool",
-      "typeVersion": 1,
-      "position": [
-        368,
-        208
-      ],
-      "id": "59f52abb-df43-49e8-85d5-9762af84216a",
-      "name": "Create a task in Google Tasks",
-      "credentials": {
-        "googleTasksOAuth2Api": {
-          "id": "6bTNNBL6dQ5T8XQE",
-          "name": "Google Tasks account"
         }
       }
     },
@@ -306,36 +288,72 @@
     },
     {
       "parameters": {
-        "documentId": {
-          "__rl": true,
-          "value": "1HOzLYHc5aM1G5VwqenTJerUzPw7Q27atEPvGMonZF9Q",
-          "mode": "list",
-          "cachedResultName": "Update Data Pelamar MBG",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HOzLYHc5aM1G5VwqenTJerUzPw7Q27atEPvGMonZF9Q/edit?usp=drivesdk"
-        },
-        "sheetName": {
-          "__rl": true,
-          "value": 1012430258,
-          "mode": "list",
-          "cachedResultName": "Relawan (baru)",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1HOzLYHc5aM1G5VwqenTJerUzPw7Q27atEPvGMonZF9Q/edit#gid=1012430258"
-        },
-        "options": {}
+        "operation": "getAll",
+        "task": null,
+        "returnAll": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Return_All', ``, 'boolean') }}",
+        "additionalFields": {}
       },
-      "type": "n8n-nodes-base.googleSheets",
-      "typeVersion": 4.7,
+      "type": "n8n-nodes-base.googleTasksTool",
+      "typeVersion": 1,
       "position": [
-        784,
-        240
+        368,
+        208
       ],
-      "id": "734056c0-b480-4e78-9ad0-0d52899a94dd",
-      "name": "Get row(s) in sheet",
+      "id": "59f52abb-df43-49e8-85d5-9762af84216a",
+      "name": "Get many tasks in Google Tasks",
       "credentials": {
-        "googleSheetsOAuth2Api": {
-          "id": "5IZ01sue2ywyQpu4",
-          "name": "Google Sheets account"
+        "googleTasksOAuth2Api": {
+          "id": "6bTNNBL6dQ5T8XQE",
+          "name": "Google Tasks account"
         }
       }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Start Typing",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        560,
+        0
+      ],
+      "id": "a8c2503a-813b-46ba-89e6-ebd1b4254331",
+      "name": "Start Typing",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "8761ded3-bd58-49b9-8b91-29495703de1d",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "batching": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainLlm",
+      "typeVersion": 1.9,
+      "position": [
+        704,
+        144
+      ],
+      "id": "11dee4e1-f605-4367-bde8-150a815c1854",
+      "name": "Basic LLM Chain"
     }
   ],
   "pinData": {},
@@ -371,7 +389,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2026-06-16T17:33:32.698Z",
-  "versionCounter": 107,
-  "versionId": "9380e531-88f3-4adf-95dc-53791f5135c7"
+  "updatedAt": "2026-06-18T11:51:54.314Z",
+  "versionCounter": 116,
+  "versionId": "df013e50-a97d-4513-a0d0-38e3f78f9422"
 }
