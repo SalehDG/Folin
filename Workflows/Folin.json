@@ -1,38 +1,21 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-17T02:52:41.000Z",
-    "createdAt": "2026-06-17T02:52:40.556Z",
-    "versionId": "be2bad12-5d44-40a7-b0fa-88e6ee5cf987",
+    "updatedAt": "2026-06-18T04:20:19.000Z",
+    "createdAt": "2026-06-18T04:19:58.322Z",
+    "versionId": "736055c6-9db6-4f8b-b7e9-a6521890fcd7",
     "workflowId": "c517osOLx0Zbnd7M",
     "nodes": [
       {
         "parameters": {
-          "promptType": "=define",
-          "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
-          "options": {
-            "systemMessage": "=# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n\n- Grup hanya boleh meminta list tugas HRD.\n- Task pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n"
-          }
-        },
-        "type": "@n8n/n8n-nodes-langchain.agent",
-        "typeVersion": 3.1,
-        "position": [
-          912,
-          160
-        ],
-        "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
-        "name": "AI Agent"
-      },
-      {
-        "parameters": {
-          "modelName": "models/gemini-2.5-flash",
+          "modelName": "models/gemini-flash-lite-latest",
           "options": {}
         },
         "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
         "typeVersion": 1.1,
         "position": [
-          912,
-          352
+          672,
+          320
         ],
         "id": "cf636936-5d00-422b-8230-fe804f33399f",
         "name": "Google Gemini Chat Model",
@@ -61,14 +44,14 @@
           "operation": "Send Text",
           "session": "={{ $('WAHA Trigger').item.json.session }}",
           "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
-          "text": "={{ $('AI Agent').item.json.output }}",
+          "text": "={{ $('AI Agent Utama').item.json.output }}",
           "requestOptions": {}
         },
         "type": "@devlikeapro/n8n-nodes-waha.WAHA",
         "typeVersion": 202502,
         "position": [
-          1632,
-          160
+          1392,
+          144
         ],
         "id": "fb3544a2-db57-47ed-bd7d-1105fa471dd2",
         "name": "Send a text message",
@@ -89,8 +72,8 @@
         "type": "@devlikeapro/n8n-nodes-waha.WAHA",
         "typeVersion": 202502,
         "position": [
-          320,
-          160
+          240,
+          144
         ],
         "id": "a339207f-62b6-437c-8b72-da5d8fb77361",
         "name": "Send Seen",
@@ -112,8 +95,8 @@
         "type": "@devlikeapro/n8n-nodes-waha.WAHA",
         "typeVersion": 202502,
         "position": [
-          672,
-          160
+          528,
+          144
         ],
         "id": "98aebe63-bb30-4481-8d57-d5db1d82f665",
         "name": "Start Typing",
@@ -135,8 +118,8 @@
         "type": "@devlikeapro/n8n-nodes-waha.WAHA",
         "typeVersion": 202502,
         "position": [
-          1392,
-          160
+          1152,
+          144
         ],
         "id": "afca1cca-b6fa-4f70-90f6-77a0fd4ee3c3",
         "name": "Stop Typing",
@@ -154,87 +137,12 @@
         "type": "n8n-nodes-base.wait",
         "typeVersion": 1.1,
         "position": [
-          496,
-          160
+          384,
+          144
         ],
         "id": "b94229d1-aa2f-485e-9ce3-c64248644a8d",
         "name": "Wait",
         "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
-      },
-      {
-        "parameters": {
-          "modelName": "models/gemini-2.5-flash",
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-        "typeVersion": 1.1,
-        "position": [
-          416,
-          800
-        ],
-        "id": "64ed482f-7ec0-45bb-bf63-17c019e93d34",
-        "name": "Google Gemini Chat Model1",
-        "credentials": {
-          "googlePalmApi": {
-            "id": "k27SnwImRZKrqF5r",
-            "name": "Google Gemini(PaLM) Api account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan (to-do list), atau menanyakan daftar pekerjaan yang belum selesai.",
-          "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
-          "options": {
-            "systemMessage": "=# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Tasks dan memilah apakah tugas ini termasuk ke Task Pribadi atau Task HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail tugas -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Penulisan Tugas (Title):\n   Nama Tugas | Deadline (Tugas Siapa)\n   Contoh: Rekap Absensi Karyawan | 18 Juni 2026 (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n  \n- Grup hanya boleh meminta list tugas HRD.\n- Task pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n\n\n"
-          }
-        },
-        "type": "@n8n/n8n-nodes-langchain.agentTool",
-        "typeVersion": 3,
-        "position": [
-          608,
-          592
-        ],
-        "id": "6eae9a41-dbdf-41fb-a9c5-5283d60d8fc4",
-        "name": "AI Agent Google Task"
-      },
-      {
-        "parameters": {
-          "modelName": "models/gemini-2.5-flash",
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-        "typeVersion": 1.1,
-        "position": [
-          1296,
-          832
-        ],
-        "id": "d04588f3-7d43-4fb0-acd1-f7947c683da6",
-        "name": "Google Gemini Chat Model2",
-        "credentials": {
-          "googlePalmApi": {
-            "id": "k27SnwImRZKrqF5r",
-            "name": "Google Gemini(PaLM) Api account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk membuat jadwal, mengatur waktu rapat, mencatat acara, atau menanyakan agenda di kalender.",
-          "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
-          "options": {
-            "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n\n- Grup hanya boleh meminta list jadwal HRD.\n- Jadwal pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n",
-            "autoSaveHighlightedData": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Auto-save_highlighted_data', ``, 'boolean') }}"
-          }
-        },
-        "type": "@n8n/n8n-nodes-langchain.agentTool",
-        "typeVersion": 3,
-        "position": [
-          1280,
-          624
-        ],
-        "id": "4ab137e2-d153-4543-b298-5ea39a29d9dc",
-        "name": "AI Agent Google Calendar"
       },
       {
         "parameters": {
@@ -245,8 +153,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          576,
-          816
+          1760,
+          944
         ],
         "id": "7a543adc-75f5-4c50-9365-35e2cbdeb7af",
         "name": "Buat Tugas Pribadi",
@@ -267,8 +175,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          736,
-          816
+          1920,
+          944
         ],
         "id": "7da5bd2c-c205-4f6d-8989-4c037b515bed",
         "name": "Ambil Tugas Pribadi",
@@ -288,8 +196,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          1024,
-          816
+          2208,
+          944
         ],
         "id": "1d07f26e-1042-4da4-a2d3-6948f9f0f63e",
         "name": "Hapus tugas pribadi",
@@ -312,8 +220,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          880,
-          816
+          2064,
+          944
         ],
         "id": "7b96a0ec-5fbc-415b-8711-31d4d7b28311",
         "name": "Perbarui tugas pribadi",
@@ -333,8 +241,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          576,
-          992
+          1760,
+          1120
         ],
         "id": "5ff52d20-e058-4ac3-8bbc-e91b181dc95f",
         "name": "Buat Tugas HRD",
@@ -355,8 +263,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          736,
-          992
+          1920,
+          1120
         ],
         "id": "6d5b3c35-67b1-4c72-aca3-7a906b4305fd",
         "name": "Ambil Tugas HRD",
@@ -379,8 +287,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          896,
-          992
+          2080,
+          1120
         ],
         "id": "2464ab65-458d-448d-8495-7a98a05139ea",
         "name": "Perbarui tugas HRD",
@@ -400,8 +308,8 @@
         "type": "n8n-nodes-base.googleTasksTool",
         "typeVersion": 1,
         "position": [
-          1056,
-          992
+          2224,
+          1120
         ],
         "id": "00e1c27d-619d-404d-812a-667d4f4e65e6",
         "name": "Hapus tugas HRD",
@@ -429,8 +337,8 @@
         "type": "n8n-nodes-base.googleCalendarTool",
         "typeVersion": 1.3,
         "position": [
-          1520,
-          1152
+          2704,
+          1136
         ],
         "id": "7fdbea51-d4fe-40cc-85ba-64bd1a5073b7",
         "name": "Buat Jadwal HRD",
@@ -458,8 +366,8 @@
         "type": "n8n-nodes-base.googleCalendarTool",
         "typeVersion": 1.3,
         "position": [
-          1712,
-          1152
+          2896,
+          1136
         ],
         "id": "f88ebf37-0ade-4e82-a4fa-661c36cde2d4",
         "name": "Ambil jadwal HRD",
@@ -485,8 +393,8 @@
         "type": "n8n-nodes-base.googleCalendarTool",
         "typeVersion": 1.3,
         "position": [
-          1888,
-          1152
+          3072,
+          1136
         ],
         "id": "0aef0102-a349-4bf3-aae1-031b49104f84",
         "name": "Perbaharui data HRD",
@@ -512,8 +420,8 @@
         "type": "n8n-nodes-base.googleCalendarTool",
         "typeVersion": 1.3,
         "position": [
-          1872,
-          944
+          3056,
+          928
         ],
         "id": "d7ca9901-55c9-4f01-9fd5-e1a72559cb0c",
         "name": "Perbaharui jadwal pribadi",
@@ -541,8 +449,8 @@
         "type": "n8n-nodes-base.googleCalendarTool",
         "typeVersion": 1.3,
         "position": [
-          1696,
-          944
+          2880,
+          928
         ],
         "id": "ce341f7d-a8f7-4633-8d6b-82f2dfe12e54",
         "name": "Ambil jadwal pribadi1",
@@ -570,8 +478,8 @@
         "type": "n8n-nodes-base.googleCalendarTool",
         "typeVersion": 1.3,
         "position": [
-          1520,
-          944
+          2704,
+          928
         ],
         "id": "d989b50b-1021-47b0-86e4-18be388ceed5",
         "name": "Bikin jadwal pribadi",
@@ -597,8 +505,8 @@
         "type": "n8n-nodes-base.googleCalendarTool",
         "typeVersion": 1.3,
         "position": [
-          2032,
-          944
+          3216,
+          928
         ],
         "id": "f1da765d-9ba5-43d9-8b89-b1b2f6d90119",
         "name": "Hapus jadwal pribadi",
@@ -624,8 +532,8 @@
         "type": "n8n-nodes-base.googleCalendarTool",
         "typeVersion": 1.3,
         "position": [
-          2048,
-          1152
+          3232,
+          1136
         ],
         "id": "7ff920e4-3f21-4125-9e2a-7451d78d8d91",
         "name": "Hapus data HRD",
@@ -635,149 +543,6 @@
             "name": "Google Calendar account"
           }
         }
-      },
-      {
-        "parameters": {
-          "promptType": "=define",
-          "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
-          "options": {
-            "systemMessage": "=# IDENTITAS\nNama: Folin | Panggilan: \"Lin\"\n\nSelalu gunakan nama lengkap Folin saat menyebut diri sendiri.\n\"Lin\" hanya panggilan dari user, bukan cara kamu memperkenalkan diri.\n\n---\n\n# KONTEKS KAMU\n\nKamu adalah mode percakapan Folin yang melayani pengguna umum —\norang yang belum terdaftar sebagai pengguna resmi.\n\nTugasmu hanya satu: ngobrol dengan baik.\n\n--\n\n# APA YANG BOLEH KAMU LAKUKAN\n\n✓ Menjawab pertanyaan umum dari pengetahuan sendiri\n✓ Obrolan santai, tanya jawab, diskusi topik umum\n✓ Memberikan saran, opini, atau informasi yang sifatnya publik\n✓ Menemani ngobrol dengan hangat dan natural\n\n---\n\n# KEPRIBADIAN & CARA BICARA\n\n- Santai dan hangat — seperti teman, bukan asisten korporat\n- Natural, boleh sedikit bahasa gaul sesuai suasana\n- To the point, tidak bertele-tele\n- Jika tidak tahu sesuatu → jujur saja, singkat\n\n---\n\n# FORMAT (WhatsApp)\n\n- Gunakan *bold* untuk hal penting\n- List pakai (–) atau nomor, beri jarak antar poin\n- Paragraf pendek, hindari dinding teks\n- Emoji secukupnya\n- Hindari ##, ---, dan formatting yang tidak didukung WhatsApp\n- Prioritaskan: mudah dibaca dan singkat"
-          }
-        },
-        "type": "@n8n/n8n-nodes-langchain.agent",
-        "typeVersion": 3.1,
-        "position": [
-          1296,
-          -320
-        ],
-        "id": "c35ceb45-fb06-4e8f-8585-ef6cd1a39224",
-        "name": "AI Agent1"
-      },
-      {
-        "parameters": {
-          "modelName": "models/gemini-2.5-flash",
-          "options": {}
-        },
-        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-        "typeVersion": 1.1,
-        "position": [
-          1296,
-          -128
-        ],
-        "id": "091a215c-0880-46ab-87d1-a0923f3caf96",
-        "name": "Google Gemini Chat Model3",
-        "credentials": {
-          "googlePalmApi": {
-            "id": "k27SnwImRZKrqF5r",
-            "name": "Google Gemini(PaLM) Api account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "resource": "Chatting",
-          "operation": "Send Text",
-          "session": "={{ $('WAHA Trigger').item.json.session }}",
-          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
-          "text": "={{ $('AI Agent1').item.json.output }}",
-          "requestOptions": {}
-        },
-        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
-        "typeVersion": 202502,
-        "position": [
-          2016,
-          -320
-        ],
-        "id": "e8a7f8b2-018e-472a-8032-8e2b547ec7b8",
-        "name": "Send a text message1",
-        "credentials": {
-          "wahaApi": {
-            "id": "WwLPlwPMLibeRJai",
-            "name": "WAHA account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "resource": "Chatting",
-          "operation": "Send Seen",
-          "participant": "",
-          "requestOptions": {}
-        },
-        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
-        "typeVersion": 202502,
-        "position": [
-          640,
-          -320
-        ],
-        "id": "dff0d1ad-6f19-4874-b0d5-0e576679820a",
-        "name": "Send Seen1",
-        "credentials": {
-          "wahaApi": {
-            "id": "WwLPlwPMLibeRJai",
-            "name": "WAHA account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "resource": "Chatting",
-          "operation": "Start Typing",
-          "session": "={{ $('WAHA Trigger').item.json.session }}",
-          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
-          "requestOptions": {}
-        },
-        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
-        "typeVersion": 202502,
-        "position": [
-          1056,
-          -320
-        ],
-        "id": "9605a6b1-9057-4359-bd0c-0e93a1e2e5c6",
-        "name": "Start Typing1",
-        "credentials": {
-          "wahaApi": {
-            "id": "WwLPlwPMLibeRJai",
-            "name": "WAHA account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "resource": "Chatting",
-          "operation": "Stop Typing",
-          "session": "={{ $('WAHA Trigger').item.json.session }}",
-          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
-          "requestOptions": {}
-        },
-        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
-        "typeVersion": 202502,
-        "position": [
-          1776,
-          -320
-        ],
-        "id": "8bd479b1-c61a-4eaf-9748-c6ade964c972",
-        "name": "Stop Typing1",
-        "credentials": {
-          "wahaApi": {
-            "id": "WwLPlwPMLibeRJai",
-            "name": "WAHA account"
-          }
-        }
-      },
-      {
-        "parameters": {
-          "amount": "=4"
-        },
-        "type": "n8n-nodes-base.wait",
-        "typeVersion": 1.1,
-        "position": [
-          848,
-          -320
-        ],
-        "id": "3c5bb10b-cfff-492e-aa06-2bd4f7b35453",
-        "name": "Wait1",
-        "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
       },
       {
         "parameters": {
@@ -807,7 +572,7 @@
         "typeVersion": 2.3,
         "position": [
           -192,
-          -48
+          64
         ],
         "id": "6e7233e8-35e5-4a6b-a4e8-d7cf8ac2846e",
         "name": "Di tag?"
@@ -871,7 +636,7 @@
                   "combinator": "and"
                 },
                 "renameOutput": true,
-                "outputKey": "Saleh"
+                "outputKey": "=Saleh"
               },
               {
                 "conditions": {
@@ -932,30 +697,194 @@
         "type": "n8n-nodes-base.switch",
         "typeVersion": 3.4,
         "position": [
-          0,
+          -32,
           160
         ],
         "id": "7de437f4-31b3-4dc9-8160-641046ce6094",
-        "name": "Switch"
+        "name": "Siapa?"
+      },
+      {
+        "parameters": {
+          "modelName": "models/gemini-flash-lite-latest",
+          "options": {}
+        },
+        "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+        "typeVersion": 1.1,
+        "position": [
+          512,
+          752
+        ],
+        "id": "cfecc8bc-30ed-43d5-85b1-43f20735f7a1",
+        "name": "Google Gemini Chat Model3",
+        "credentials": {
+          "googlePalmApi": {
+            "id": "k27SnwImRZKrqF5r",
+            "name": "Google Gemini(PaLM) Api account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Send Seen",
+          "participant": "",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          80,
+          576
+        ],
+        "id": "15dcd56c-c0e3-4573-990c-1fca6d4df7e6",
+        "name": "Send Seen1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Start Typing",
+          "session": "={{ $('WAHA Trigger').item.json.session }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          368,
+          576
+        ],
+        "id": "1ee97cd0-6b4c-42ba-8c6f-39edd3f6ced9",
+        "name": "Start Typing1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "amount": "=4"
+        },
+        "type": "n8n-nodes-base.wait",
+        "typeVersion": 1.1,
+        "position": [
+          224,
+          576
+        ],
+        "id": "aa1eed94-fc07-43d4-8e9a-2270b4e117a4",
+        "name": "Wait1",
+        "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
+      },
+      {
+        "parameters": {
+          "content": "## Google Task",
+          "height": 480,
+          "width": 832
+        },
+        "type": "n8n-nodes-base.stickyNote",
+        "position": [
+          1536,
+          832
+        ],
+        "typeVersion": 1,
+        "id": "9ee88c6f-4949-4025-a9c7-754179c6da0b",
+        "name": "Sticky Note"
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Send Text",
+          "session": "={{ $('WAHA Trigger').item.json.session }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+          "text": "={{ $('AI Agent Umum').item.json.output }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          912,
+          576
+        ],
+        "id": "66e6554f-7573-4207-81df-7417b8b17a08",
+        "name": "Send a text message1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "resource": "Chatting",
+          "operation": "Stop Typing",
+          "session": "={{ $('WAHA Trigger').item.json.session }}",
+          "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+          "requestOptions": {}
+        },
+        "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+        "typeVersion": 202502,
+        "position": [
+          768,
+          576
+        ],
+        "id": "0b52035f-b736-4742-bc5a-84b9a02438e6",
+        "name": "Stop Typing1",
+        "credentials": {
+          "wahaApi": {
+            "id": "WwLPlwPMLibeRJai",
+            "name": "WAHA account"
+          }
+        }
+      },
+      {
+        "parameters": {
+          "promptType": "=define",
+          "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
+          "options": {
+            "systemMessage": "=Role: You are \"Folin\" (User calls you \"Lin\"). Always refer to yourself as Folin.\nTime: {{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\nPersona (Speaking Mode):\n- Warm, natural, and friendly (like a friend, not corporate).\n- Concise and direct.\n- ALWAYS reply in casual Indonesian.\n\nFormat (WhatsApp-Optimized):\n- Prefer short responses and short paragraphs. No text walls.\n- Use (-) or numbers for short lists, ensuring spacing (empty lines) between items.\n- Use *single asterisks* for *bold* text.\n- Use emojis sparingly.\n- AVOID unsupported markdown (NO ##, ---, or **)."
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          512,
+          576
+        ],
+        "id": "3a62a8e7-d13d-475c-ae75-0bd35c9ca0ba",
+        "name": "AI Agent Umum"
+      },
+      {
+        "parameters": {
+          "promptType": "=define",
+          "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
+          "options": {
+            "systemMessage": "=Role: You are \"Folin\" (called \"Lin\"). Manage Google Calendar & Tasks, strictly filtering between Personal and HRD scopes.\nTime: {{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\nSender ID: {{ $('WAHA Trigger').item.json.payload.from }}\n\nAccess Rules (CRITICAL):\n- \"REDACTED_OWNER_ID@lid\" (Saleh): FULL access (Personal & HRD).\n- \"REDACTED_GROUP_HRD@g.us\" & \"REDACTED_GROUP_PERSONAL@g.us\": HRD ONLY. STRICTLY NO access to personal tools.\n- NEVER assume sender is Saleh. Block unauthorized personal requests politely.\n\nWorkflow: Check Sender ID -> Verify Access -> Extract info -> Execute Tool -> Confirm.\n\nTool Data Formats:\n- Calendar (Summary): Event Name | Start Time (Owner) -> e.g., Interview Kandidat | 10:00 WIB (HRD)\n- Tasks (Title): Task Name | Deadline (Owner) -> e.g., Rekap Absensi | 18 Juni 2026 (HRD)\n\nOutput Format (WhatsApp-Optimized):\n- ALWAYS reply in casual Indonesian.\n- Prefer short paragraphs. No text walls.\n- Use *single asterisks* for *bold* text.\n- Use (-) or numbers for short lists, ensuring spacing (empty lines) between items.\n- AVOID unsupported markdown (NO ##, ---, or **)."
+          }
+        },
+        "type": "@n8n/n8n-nodes-langchain.agent",
+        "typeVersion": 3.1,
+        "position": [
+          672,
+          144
+        ],
+        "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
+        "name": "AI Agent Utama"
       }
     ],
     "connections": {
-      "AI Agent": {
-        "main": [
-          [
-            {
-              "node": "Stop Typing",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Google Gemini Chat Model": {
         "ai_languageModel": [
           [
             {
-              "node": "AI Agent",
+              "node": "AI Agent Utama",
               "type": "ai_languageModel",
               "index": 0
             }
@@ -989,7 +918,7 @@
         "main": [
           [
             {
-              "node": "AI Agent",
+              "node": "AI Agent Utama",
               "type": "main",
               "index": 0
             }
@@ -1018,55 +947,11 @@
           ]
         ]
       },
-      "Google Gemini Chat Model1": {
-        "ai_languageModel": [
-          [
-            {
-              "node": "AI Agent Google Task",
-              "type": "ai_languageModel",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "AI Agent Google Task": {
-        "ai_tool": [
-          [
-            {
-              "node": "AI Agent",
-              "type": "ai_tool",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Google Gemini Chat Model2": {
-        "ai_languageModel": [
-          [
-            {
-              "node": "AI Agent Google Calendar",
-              "type": "ai_languageModel",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "AI Agent Google Calendar": {
-        "ai_tool": [
-          [
-            {
-              "node": "AI Agent",
-              "type": "ai_tool",
-              "index": 0
-            }
-          ]
-        ]
-      },
       "Buat Tugas Pribadi": {
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Task",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1077,7 +962,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Task",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1088,7 +973,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Task",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1099,7 +984,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Task",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1110,7 +995,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Task",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1121,7 +1006,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Task",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1132,7 +1017,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Task",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1143,7 +1028,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Task",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1154,7 +1039,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Calendar",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1165,7 +1050,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Calendar",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1176,7 +1061,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Calendar",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1187,7 +1072,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Calendar",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1198,7 +1083,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Calendar",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1209,7 +1094,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Calendar",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1220,7 +1105,7 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Calendar",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
               "index": 0
             }
@@ -1231,74 +1116,8 @@
         "ai_tool": [
           [
             {
-              "node": "AI Agent Google Calendar",
+              "node": "AI Agent Utama",
               "type": "ai_tool",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "AI Agent1": {
-        "main": [
-          [
-            {
-              "node": "Stop Typing1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Google Gemini Chat Model3": {
-        "ai_languageModel": [
-          [
-            {
-              "node": "AI Agent1",
-              "type": "ai_languageModel",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Send Seen1": {
-        "main": [
-          [
-            {
-              "node": "Wait1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Start Typing1": {
-        "main": [
-          [
-            {
-              "node": "AI Agent1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Stop Typing1": {
-        "main": [
-          [
-            {
-              "node": "Send a text message1",
-              "type": "main",
-              "index": 0
-            }
-          ]
-        ]
-      },
-      "Wait1": {
-        "main": [
-          [
-            {
-              "node": "Start Typing1",
-              "type": "main",
               "index": 0
             }
           ]
@@ -1308,7 +1127,7 @@
         "main": [
           [
             {
-              "node": "Switch",
+              "node": "Siapa?",
               "type": "main",
               "index": 0
             }
@@ -1327,14 +1146,14 @@
           ],
           [
             {
-              "node": "Switch",
+              "node": "Siapa?",
               "type": "main",
               "index": 0
             }
           ]
         ]
       },
-      "Switch": {
+      "Siapa?": {
         "main": [
           [
             {
@@ -1365,42 +1184,108 @@
             }
           ]
         ]
+      },
+      "Google Gemini Chat Model3": {
+        "ai_languageModel": [
+          [
+            {
+              "node": "AI Agent Umum",
+              "type": "ai_languageModel",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Send Seen1": {
+        "main": [
+          [
+            {
+              "node": "Wait1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Start Typing1": {
+        "main": [
+          [
+            {
+              "node": "AI Agent Umum",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Wait1": {
+        "main": [
+          [
+            {
+              "node": "Start Typing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "Stop Typing1": {
+        "main": [
+          [
+            {
+              "node": "Send a text message1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent Umum": {
+        "main": [
+          [
+            {
+              "node": "Stop Typing1",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
+      },
+      "AI Agent Utama": {
+        "main": [
+          [
+            {
+              "node": "Stop Typing",
+              "type": "main",
+              "index": 0
+            }
+          ]
+        ]
       }
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "Version be2bad12",
+    "name": "Efektifin system",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-17T02:52:41.920Z",
-        "id": 77,
+        "createdAt": "2026-06-18T04:20:19.194Z",
+        "id": 81,
         "workflowId": "c517osOLx0Zbnd7M",
-        "versionId": "be2bad12-5d44-40a7-b0fa-88e6ee5cf987",
+        "versionId": "736055c6-9db6-4f8b-b7e9-a6521890fcd7",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "be2bad12-5d44-40a7-b0fa-88e6ee5cf987",
+  "activeVersionId": "736055c6-9db6-4f8b-b7e9-a6521890fcd7",
   "connections": {
-    "AI Agent": {
-      "main": [
-        [
-          {
-            "node": "Stop Typing",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Google Gemini Chat Model": {
       "ai_languageModel": [
         [
           {
-            "node": "AI Agent",
+            "node": "AI Agent Utama",
             "type": "ai_languageModel",
             "index": 0
           }
@@ -1434,7 +1319,7 @@
       "main": [
         [
           {
-            "node": "AI Agent",
+            "node": "AI Agent Utama",
             "type": "main",
             "index": 0
           }
@@ -1463,55 +1348,11 @@
         ]
       ]
     },
-    "Google Gemini Chat Model1": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent Google Task",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent Google Task": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Google Gemini Chat Model2": {
-      "ai_languageModel": [
-        [
-          {
-            "node": "AI Agent Google Calendar",
-            "type": "ai_languageModel",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "AI Agent Google Calendar": {
-      "ai_tool": [
-        [
-          {
-            "node": "AI Agent",
-            "type": "ai_tool",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Buat Tugas Pribadi": {
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Task",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1522,7 +1363,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Task",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1533,7 +1374,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Task",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1544,7 +1385,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Task",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1555,7 +1396,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Task",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1566,7 +1407,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Task",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1577,7 +1418,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Task",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1588,7 +1429,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Task",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1599,7 +1440,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Calendar",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1610,7 +1451,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Calendar",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1621,7 +1462,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Calendar",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1632,7 +1473,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Calendar",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1643,7 +1484,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Calendar",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1654,7 +1495,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Calendar",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1665,7 +1506,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Calendar",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1676,7 +1517,7 @@
       "ai_tool": [
         [
           {
-            "node": "AI Agent Google Calendar",
+            "node": "AI Agent Utama",
             "type": "ai_tool",
             "index": 0
           }
@@ -1687,7 +1528,7 @@
       "main": [
         [
           {
-            "node": "Switch",
+            "node": "Siapa?",
             "type": "main",
             "index": 0
           }
@@ -1706,14 +1547,14 @@
         ],
         [
           {
-            "node": "Switch",
+            "node": "Siapa?",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Switch": {
+    "Siapa?": {
       "main": [
         [
           {
@@ -1738,7 +1579,84 @@
         ],
         [
           {
-            "node": "Send Seen",
+            "node": "Send Seen1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent Umum",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Seen1": {
+      "main": [
+        [
+          {
+            "node": "Wait1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Typing1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent Umum",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait1": {
+      "main": [
+        [
+          {
+            "node": "Start Typing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Stop Typing1": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Umum": {
+      "main": [
+        [
+          {
+            "node": "Stop Typing1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent Utama": {
+      "main": [
+        [
+          {
+            "node": "Stop Typing",
             "type": "main",
             "index": 0
           }
@@ -1758,31 +1676,14 @@
   "nodes": [
     {
       "parameters": {
-        "promptType": "=define",
-        "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
-        "options": {
-          "systemMessage": "=# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n\n- Grup hanya boleh meminta list tugas HRD.\n- Task pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agent",
-      "typeVersion": 3.1,
-      "position": [
-        912,
-        160
-      ],
-      "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
-      "name": "AI Agent"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.5-flash",
+        "modelName": "models/gemini-flash-lite-latest",
         "options": {}
       },
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.1,
       "position": [
-        912,
-        352
+        672,
+        320
       ],
       "id": "cf636936-5d00-422b-8230-fe804f33399f",
       "name": "Google Gemini Chat Model",
@@ -1811,14 +1712,14 @@
         "operation": "Send Text",
         "session": "={{ $('WAHA Trigger').item.json.session }}",
         "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
-        "text": "={{ $('AI Agent').item.json.output }}",
+        "text": "={{ $('AI Agent Utama').item.json.output }}",
         "requestOptions": {}
       },
       "type": "@devlikeapro/n8n-nodes-waha.WAHA",
       "typeVersion": 202502,
       "position": [
-        1632,
-        160
+        1392,
+        144
       ],
       "id": "fb3544a2-db57-47ed-bd7d-1105fa471dd2",
       "name": "Send a text message",
@@ -1839,8 +1740,8 @@
       "type": "@devlikeapro/n8n-nodes-waha.WAHA",
       "typeVersion": 202502,
       "position": [
-        480,
-        160
+        240,
+        144
       ],
       "id": "a339207f-62b6-437c-8b72-da5d8fb77361",
       "name": "Send Seen",
@@ -1862,8 +1763,8 @@
       "type": "@devlikeapro/n8n-nodes-waha.WAHA",
       "typeVersion": 202502,
       "position": [
-        768,
-        160
+        528,
+        144
       ],
       "id": "98aebe63-bb30-4481-8d57-d5db1d82f665",
       "name": "Start Typing",
@@ -1885,8 +1786,8 @@
       "type": "@devlikeapro/n8n-nodes-waha.WAHA",
       "typeVersion": 202502,
       "position": [
-        1392,
-        160
+        1152,
+        144
       ],
       "id": "afca1cca-b6fa-4f70-90f6-77a0fd4ee3c3",
       "name": "Stop Typing",
@@ -1904,87 +1805,12 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        624,
-        160
+        384,
+        144
       ],
       "id": "b94229d1-aa2f-485e-9ce3-c64248644a8d",
       "name": "Wait",
       "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.5-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1.1,
-      "position": [
-        416,
-        800
-      ],
-      "id": "64ed482f-7ec0-45bb-bf63-17c019e93d34",
-      "name": "Google Gemini Chat Model1",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "k27SnwImRZKrqF5r",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk mencatat tugas, hal yang harus dikerjakan (to-do list), atau menanyakan daftar pekerjaan yang belum selesai.",
-        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
-        "options": {
-          "systemMessage": "=# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Tasks dan memilah apakah tugas ini termasuk ke Task Pribadi atau Task HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail tugas -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Penulisan Tugas (Title):\n   Nama Tugas | Deadline (Tugas Siapa)\n   Contoh: Rekap Absensi Karyawan | 18 Juni 2026 (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n  \n- Grup hanya boleh meminta list tugas HRD.\n- Task pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n\n\n"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agentTool",
-      "typeVersion": 3,
-      "position": [
-        608,
-        592
-      ],
-      "id": "6eae9a41-dbdf-41fb-a9c5-5283d60d8fc4",
-      "name": "AI Agent Google Task"
-    },
-    {
-      "parameters": {
-        "modelName": "models/gemini-2.5-flash",
-        "options": {}
-      },
-      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
-      "typeVersion": 1.1,
-      "position": [
-        1296,
-        832
-      ],
-      "id": "d04588f3-7d43-4fb0-acd1-f7947c683da6",
-      "name": "Google Gemini Chat Model2",
-      "credentials": {
-        "googlePalmApi": {
-          "id": "k27SnwImRZKrqF5r",
-          "name": "Google Gemini(PaLM) Api account"
-        }
-      }
-    },
-    {
-      "parameters": {
-        "toolDescription": "Gunakan alat ini HANYA ketika user meminta untuk membuat jadwal, mengatur waktu rapat, mencatat acara, atau menanyakan agenda di kalender.",
-        "text": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Prompt__User_Message_', ``, 'string') }}",
-        "options": {
-          "systemMessage": "# PERAN & TUGAS UTAMA\nTugas utamamu adalah mengeksekusi semua kebutuhan tentang Google Calendar dan memilah apakah jadwal ini masuk ke ranah Kalender Pribadi atau Kalender HRD.\n\n# WAKTU SAAT INI\n{{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\n# IDENTITAS PENGIRIM & AKSES\n\nPengirim saat ini: {{ $('WAHA Trigger').item.json.payload.from }}\n\n⚠️ LANGKAH WAJIB PERTAMA — sebelum melakukan APAPUN:\nBaca nilai pengirim di atas. Cocokkan dengan aksesnya:\n\nAturan akses:\n- REDACTED_OWNER_ID@lid (Saleh) → akses penuh semua fitur & data pribadi\n- REDACTED_GROUP_HRD@g.us (Grup HRD) & REDACTED_GROUP_PERSONAL@g.us (Grup pribadi) → akses tool HRD saja, tidak boleh akses tool pribadi sama sekali.\n\n⚠️ Jangan asumsikan setiap pengirim adalah Saleh.\n\n# CATATAN & ATURAN KERJA\n1. Alur Eksekusi: \n   Identifikasi siapa yang meminta/asal grup -> Ekstrak detail jadwal -> Eksekusi [Tools] -> Konfirmasi ke AI Induk.\n\n2. Format Judul Acara (Summary):\n   Nama Acara | Waktu Mulai (Jadwal Siapa)\n   Contoh: Interview Kandidat | 10:00 WIB (HRD)\n\n3. Aturan Privasi & Pemilahan (MUTLAK):\n\n- Grup hanya boleh meminta list jadwal HRD.\n- Jadwal pribadi hanya boleh di akses Saleh seorang, tanpa terkecuali!. Jika ada yang meminta, berikan saja apa yang dia izinkan, jangan berikan yang ini!\n",
-          "autoSaveHighlightedData": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Auto-save_highlighted_data', ``, 'boolean') }}"
-        }
-      },
-      "type": "@n8n/n8n-nodes-langchain.agentTool",
-      "typeVersion": 3,
-      "position": [
-        1280,
-        624
-      ],
-      "id": "4ab137e2-d153-4543-b298-5ea39a29d9dc",
-      "name": "AI Agent Google Calendar"
     },
     {
       "parameters": {
@@ -1995,8 +1821,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        576,
-        816
+        1760,
+        944
       ],
       "id": "7a543adc-75f5-4c50-9365-35e2cbdeb7af",
       "name": "Buat Tugas Pribadi",
@@ -2017,8 +1843,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        736,
-        816
+        1920,
+        944
       ],
       "id": "7da5bd2c-c205-4f6d-8989-4c037b515bed",
       "name": "Ambil Tugas Pribadi",
@@ -2038,8 +1864,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        1024,
-        816
+        2208,
+        944
       ],
       "id": "1d07f26e-1042-4da4-a2d3-6948f9f0f63e",
       "name": "Hapus tugas pribadi",
@@ -2062,8 +1888,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        880,
-        816
+        2064,
+        944
       ],
       "id": "7b96a0ec-5fbc-415b-8711-31d4d7b28311",
       "name": "Perbarui tugas pribadi",
@@ -2083,8 +1909,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        576,
-        992
+        1760,
+        1120
       ],
       "id": "5ff52d20-e058-4ac3-8bbc-e91b181dc95f",
       "name": "Buat Tugas HRD",
@@ -2105,8 +1931,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        736,
-        992
+        1920,
+        1120
       ],
       "id": "6d5b3c35-67b1-4c72-aca3-7a906b4305fd",
       "name": "Ambil Tugas HRD",
@@ -2129,8 +1955,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        896,
-        992
+        2080,
+        1120
       ],
       "id": "2464ab65-458d-448d-8495-7a98a05139ea",
       "name": "Perbarui tugas HRD",
@@ -2150,8 +1976,8 @@
       "type": "n8n-nodes-base.googleTasksTool",
       "typeVersion": 1,
       "position": [
-        1056,
-        992
+        2224,
+        1120
       ],
       "id": "00e1c27d-619d-404d-812a-667d4f4e65e6",
       "name": "Hapus tugas HRD",
@@ -2179,8 +2005,8 @@
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
       "position": [
-        1520,
-        1152
+        2704,
+        1136
       ],
       "id": "7fdbea51-d4fe-40cc-85ba-64bd1a5073b7",
       "name": "Buat Jadwal HRD",
@@ -2208,8 +2034,8 @@
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
       "position": [
-        1712,
-        1152
+        2896,
+        1136
       ],
       "id": "f88ebf37-0ade-4e82-a4fa-661c36cde2d4",
       "name": "Ambil jadwal HRD",
@@ -2235,8 +2061,8 @@
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
       "position": [
-        1888,
-        1152
+        3072,
+        1136
       ],
       "id": "0aef0102-a349-4bf3-aae1-031b49104f84",
       "name": "Perbaharui data HRD",
@@ -2262,8 +2088,8 @@
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
       "position": [
-        1872,
-        944
+        3056,
+        928
       ],
       "id": "d7ca9901-55c9-4f01-9fd5-e1a72559cb0c",
       "name": "Perbaharui jadwal pribadi",
@@ -2291,8 +2117,8 @@
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
       "position": [
-        1696,
-        944
+        2880,
+        928
       ],
       "id": "ce341f7d-a8f7-4633-8d6b-82f2dfe12e54",
       "name": "Ambil jadwal pribadi1",
@@ -2320,8 +2146,8 @@
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
       "position": [
-        1520,
-        944
+        2704,
+        928
       ],
       "id": "d989b50b-1021-47b0-86e4-18be388ceed5",
       "name": "Bikin jadwal pribadi",
@@ -2347,8 +2173,8 @@
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
       "position": [
-        2032,
-        944
+        3216,
+        928
       ],
       "id": "f1da765d-9ba5-43d9-8b89-b1b2f6d90119",
       "name": "Hapus jadwal pribadi",
@@ -2374,8 +2200,8 @@
       "type": "n8n-nodes-base.googleCalendarTool",
       "typeVersion": 1.3,
       "position": [
-        2048,
-        1152
+        3232,
+        1136
       ],
       "id": "7ff920e4-3f21-4125-9e2a-7451d78d8d91",
       "name": "Hapus data HRD",
@@ -2414,7 +2240,7 @@
       "typeVersion": 2.3,
       "position": [
         -192,
-        -48
+        64
       ],
       "id": "6e7233e8-35e5-4a6b-a4e8-d7cf8ac2846e",
       "name": "Di tag?"
@@ -2539,34 +2365,186 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.4,
       "position": [
-        0,
+        -32,
         160
       ],
       "id": "7de437f4-31b3-4dc9-8160-641046ce6094",
-      "name": "Switch"
+      "name": "Siapa?"
     },
     {
       "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "bea4c17a-d419-4b94-80df-1ef591d526fb",
-              "name": "",
-              "value": "",
-              "type": "string"
-            }
-          ]
-        },
+        "modelName": "models/gemini-flash-lite-latest",
         "options": {}
       },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.1,
       "position": [
-        208,
-        48
+        512,
+        752
       ],
-      "id": "38f3a508-0c32-4164-af40-543525e3c8a9",
-      "name": "Edit Fields"
+      "id": "cfecc8bc-30ed-43d5-85b1-43f20735f7a1",
+      "name": "Google Gemini Chat Model3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "k27SnwImRZKrqF5r",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Seen",
+        "participant": "",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        80,
+        576
+      ],
+      "id": "15dcd56c-c0e3-4573-990c-1fca6d4df7e6",
+      "name": "Send Seen1",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Start Typing",
+        "session": "={{ $('WAHA Trigger').item.json.session }}",
+        "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        368,
+        576
+      ],
+      "id": "1ee97cd0-6b4c-42ba-8c6f-39edd3f6ced9",
+      "name": "Start Typing1",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": "=4"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        224,
+        576
+      ],
+      "id": "aa1eed94-fc07-43d4-8e9a-2270b4e117a4",
+      "name": "Wait1",
+      "webhookId": "31666874-2f48-472f-bfcd-7b97434314a7"
+    },
+    {
+      "parameters": {
+        "content": "## Google Task",
+        "height": 480,
+        "width": 832
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1536,
+        832
+      ],
+      "typeVersion": 1,
+      "id": "9ee88c6f-4949-4025-a9c7-754179c6da0b",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Text",
+        "session": "={{ $('WAHA Trigger').item.json.session }}",
+        "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+        "text": "={{ $('AI Agent Umum').item.json.output }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        912,
+        576
+      ],
+      "id": "66e6554f-7573-4207-81df-7417b8b17a08",
+      "name": "Send a text message1",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Stop Typing",
+        "session": "={{ $('WAHA Trigger').item.json.session }}",
+        "chatId": "={{ $('WAHA Trigger').item.json.payload.from }}",
+        "requestOptions": {}
+      },
+      "type": "@devlikeapro/n8n-nodes-waha.WAHA",
+      "typeVersion": 202502,
+      "position": [
+        768,
+        576
+      ],
+      "id": "0b52035f-b736-4742-bc5a-84b9a02438e6",
+      "name": "Stop Typing1",
+      "credentials": {
+        "wahaApi": {
+          "id": "WwLPlwPMLibeRJai",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "=define",
+        "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
+        "options": {
+          "systemMessage": "=Role: You are \"Folin\" (User calls you \"Lin\"). Always refer to yourself as Folin.\nTime: {{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\n\nPersona (Speaking Mode):\n- Warm, natural, and friendly (like a friend, not corporate).\n- Concise and direct.\n- ALWAYS reply in casual Indonesian.\n\nFormat (WhatsApp-Optimized):\n- Prefer short responses and short paragraphs. No text walls.\n- Use (-) or numbers for short lists, ensuring spacing (empty lines) between items.\n- Use *single asterisks* for *bold* text.\n- Use emojis sparingly.\n- AVOID unsupported markdown (NO ##, ---, or **)."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        512,
+        576
+      ],
+      "id": "3a62a8e7-d13d-475c-ae75-0bd35c9ca0ba",
+      "name": "AI Agent Umum"
+    },
+    {
+      "parameters": {
+        "promptType": "=define",
+        "text": "={{ $('WAHA Trigger').item.json.payload.body }}",
+        "options": {
+          "systemMessage": "=Role: You are \"Folin\" (called \"Lin\"). Manage Google Calendar & Tasks, strictly filtering between Personal and HRD scopes.\nTime: {{ $now.setZone('Asia/Jakarta').toFormat('cccc, dd MMMM yyyy - HH:mm WIB') }}\nSender ID: {{ $('WAHA Trigger').item.json.payload.from }}\n\nAccess Rules (CRITICAL):\n- \"REDACTED_OWNER_ID@lid\" (Saleh): FULL access (Personal & HRD).\n- \"REDACTED_GROUP_HRD@g.us\" & \"REDACTED_GROUP_PERSONAL@g.us\": HRD ONLY. STRICTLY NO access to personal tools.\n- NEVER assume sender is Saleh. Block unauthorized personal requests politely.\n\nWorkflow: Check Sender ID -> Verify Access -> Extract info -> Execute Tool -> Confirm.\n\nTool Data Formats:\n- Calendar (Summary): Event Name | Start Time (Owner) -> e.g., Interview Kandidat | 10:00 WIB (HRD)\n- Tasks (Title): Task Name | Deadline (Owner) -> e.g., Rekap Absensi | 18 Juni 2026 (HRD)\n\nOutput Format (WhatsApp-Optimized):\n- ALWAYS reply in casual Indonesian.\n- Prefer short paragraphs. No text walls.\n- Use *single asterisks* for *bold* text.\n- Use (-) or numbers for short lists, ensuring spacing (empty lines) between items.\n- AVOID unsupported markdown (NO ##, ---, or **)."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        672,
+        144
+      ],
+      "id": "f5dbe28a-b29b-460b-a298-39af5ac61fe9",
+      "name": "AI Agent Utama"
     }
   ],
   "pinData": {},
@@ -2602,7 +2580,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-17T08:18:21.523Z",
-  "versionCounter": 951,
-  "versionId": "4e8a4f9e-2bb9-4def-8253-e7e6c864be85"
+  "updatedAt": "2026-06-18T04:19:58.320Z",
+  "versionCounter": 1046,
+  "versionId": "736055c6-9db6-4f8b-b7e9-a6521890fcd7"
 }
