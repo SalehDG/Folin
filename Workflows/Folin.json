@@ -1,9 +1,9 @@
 {
   "active": true,
   "activeVersion": {
-    "updatedAt": "2026-06-19T20:54:00.000Z",
-    "createdAt": "2026-06-19T20:52:22.748Z",
-    "versionId": "09a0e10b-a6e8-47d3-a2f0-456be88f1270",
+    "updatedAt": "2026-06-19T21:20:20.000Z",
+    "createdAt": "2026-06-19T21:20:12.828Z",
+    "versionId": "d9e1e834-f982-407b-9ed8-e48e81ba21a7",
     "workflowId": "c517osOLx0Zbnd7M",
     "nodes": [
       {
@@ -940,7 +940,7 @@
       {
         "parameters": {
           "operation": "update",
-          "task": "dDdWRzg5UHVjdWljcHBIdQ",
+          "task": "ZzQyUmlNdzRtVV9ES1FSeQ",
           "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}",
           "updateFields": {
             "status": "completed"
@@ -964,7 +964,7 @@
       {
         "parameters": {
           "operation": "delete",
-          "task": "dDdWRzg5UHVjdWljcHBIdQ",
+          "task": "ZzQyUmlNdzRtVV9ES1FSeQ",
           "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
         },
         "type": "n8n-nodes-base.googleTasksTool",
@@ -1413,21 +1413,21 @@
     },
     "nodeGroups": [],
     "authors": "Saleh DG",
-    "name": "Version 09a0e10b",
+    "name": "Version d9e1e834",
     "description": "",
     "autosaved": true,
     "workflowPublishHistory": [
       {
-        "createdAt": "2026-06-19T20:53:59.970Z",
-        "id": 109,
+        "createdAt": "2026-06-19T21:20:20.227Z",
+        "id": 111,
         "workflowId": "c517osOLx0Zbnd7M",
-        "versionId": "09a0e10b-a6e8-47d3-a2f0-456be88f1270",
+        "versionId": "d9e1e834-f982-407b-9ed8-e48e81ba21a7",
         "event": "activated",
         "userId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
       }
     ]
   },
-  "activeVersionId": "09a0e10b-a6e8-47d3-a2f0-456be88f1270",
+  "activeVersionId": "d9e1e834-f982-407b-9ed8-e48e81ba21a7",
   "connections": {
     "Google Gemini Chat Model": {
       "ai_languageModel": [
@@ -2800,7 +2800,7 @@
     {
       "parameters": {
         "operation": "update",
-        "task": "dDdWRzg5UHVjdWljcHBIdQ",
+        "task": "ZzQyUmlNdzRtVV9ES1FSeQ",
         "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}",
         "updateFields": {
           "status": "completed"
@@ -2824,7 +2824,7 @@
     {
       "parameters": {
         "operation": "delete",
-        "task": "dDdWRzg5UHVjdWljcHBIdQ",
+        "task": "ZzQyUmlNdzRtVV9ES1FSeQ",
         "taskId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Task_ID', ``, 'string') }}"
       },
       "type": "n8n-nodes-base.googleTasksTool",
@@ -2876,7 +2876,7 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 1,
-  "updatedAt": "2026-06-19T20:52:22.745Z",
-  "versionCounter": 1208,
-  "versionId": "09a0e10b-a6e8-47d3-a2f0-456be88f1270"
+  "updatedAt": "2026-06-19T21:20:12.824Z",
+  "versionCounter": 1210,
+  "versionId": "d9e1e834-f982-407b-9ed8-e48e81ba21a7"
 }
