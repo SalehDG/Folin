@@ -1,0 +1,47 @@
+{
+  "active": false,
+  "activeVersion": null,
+  "activeVersionId": null,
+  "connections": {},
+  "createdAt": "2026-06-23T03:35:15.516Z",
+  "description": null,
+  "id": "kXRkMQRsDIn47bG5",
+  "isArchived": false,
+  "meta": null,
+  "name": "Pudding",
+  "nodeGroups": [],
+  "nodes": [],
+  "pinData": {},
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "shared": [
+    {
+      "updatedAt": "2026-06-23T03:35:15.527Z",
+      "createdAt": "2026-06-23T03:35:15.527Z",
+      "role": "workflow:owner",
+      "workflowId": "kXRkMQRsDIn47bG5",
+      "projectId": "kbiHS04LQQ6cOAs2",
+      "project": {
+        "updatedAt": "2026-06-13T12:21:43.212Z",
+        "createdAt": "2026-06-13T11:21:43.893Z",
+        "id": "kbiHS04LQQ6cOAs2",
+        "name": "Saleh DG <REDACTED_EMAIL@example.com>",
+        "type": "personal",
+        "icon": null,
+        "description": null,
+        "customTelemetryTags": [],
+        "creatorId": "11ec36fc-2c7e-4d1e-bfea-bb564e5f5b2f"
+      }
+    }
+  ],
+  "sourceWorkflowId": null,
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2026-06-23T04:13:40.248Z",
+  "versionCounter": 3,
+  "versionId": "6ba54a7b-b1bb-4462-ac7a-d0d74c5b0214"
+}
