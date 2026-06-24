@@ -87,29 +87,6 @@ Folin runs on a **2GB RAM VPS** (Biznet Gio NEO Lite), running n8n, WAHA, and Ng
 
 ---
 
-## Setup
-
-```bash
-# Clone and configure
-git clone <your-repo-url>
-cd folin
-cp .env.example .env   # fill in Gemini API key, WAHA session config, etc.
-
-# Bring up the stack
-docker compose up -d
-
-# Pair the WAHA session (scan QR from logs or WAHA dashboard)
-# No manual webhook configuration needed — the WAHA Trigger node
-# (community node: @devlikeapro/n8n-nodes-waha) handles event delivery directly.
-docker compose logs -f waha
-```
-
-n8n workflows are exported as JSON under `/workflows` — import via the n8n editor UI or the backup automation included in this repo.
-
-> Replace `<your-repo-url>` and confirm `.env.example` matches your current variable names before publishing.
-
----
-
 ## Status
 
 - [x] Single LLM round-trip per message (no chained calls)
@@ -119,17 +96,3 @@ n8n workflows are exported as JSON under `/workflows` — import via the n8n edi
 - [x] GitHub backup automation
 - [x] Sentinel-token silent scheduling
 - [ ] *(add what's actually next — hard tool-level scope isolation instead of prompt-level, more granular tiers, etc.)*
-
-> Before publishing the workflow JSON itself: scrub the literal sender/group IDs in `payload.from` conditions. They're real WhatsApp identifiers.
-
----
-
-## Demo
-
-*Add a screenshot or short GIF of an actual WhatsApp conversation here — this matters more for credibility than any paragraph of description.*
-
----
-
-## License
-
-*Choose one (MIT is the common default for portfolio projects) and add it here.*
